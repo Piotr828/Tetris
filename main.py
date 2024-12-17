@@ -1,3 +1,6 @@
-# Tu będą deklaracje funkcji py wywoływanych z JS
-def multiply(x,y):
-    return x * y
+zmienne = {}
+zmienne[0] = 1
+def multiply(x, y):
+    global zmienne  # Deklaracja użycia zmiennej globalnej
+    zmienne[0] += x * y
+    return zmienne[0]  # Wypisanie wyniku

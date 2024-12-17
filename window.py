@@ -11,7 +11,6 @@ class API:
         func = getattr(api_module, function_name, None)
         if func:
             return func(*args)  # Wywołanie funkcji z argumentami
-        return f"Function '{function_name}' not found"
     
 api_instance = API()
 
