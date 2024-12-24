@@ -6,7 +6,7 @@ html, .body{
 }
 
 .body{
-    background-image: url("../images/tetris.jpg");
+    /*background-image: url("../images/tetris.jpg");*/
     background-size: 800px 550px;
     background-attachment: fixed;
     display: flex;

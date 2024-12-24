@@ -15,3 +15,17 @@
 .button:active{
     background-color: rgba(96, 102, 107, 0.7);
 }
+.klocek_menu{
+    position: absolute;
+    background-color: burlywood;
+    font-size: medium;
+    animation: drop 10s forwards linear;
+    height: 50px;
+    line-height: 50px;
+    z-index: -1;
+}
+@keyframes drop{
+from{bottom: 120vh;}
+to{bottom: 0}
+
+}
