@@ -1,0 +1,15 @@
+html, .body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.body{
+    background-image: url("../images/tetris.jpg");
+    background-size: 800px 550px;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

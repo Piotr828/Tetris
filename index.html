@@ -23,16 +23,23 @@
     <meta name="theme-color" content="#000000">
     <!-- Plik manifestu (jeśli aplikacja wymaga dodatkowych zasobów) -->
 <!--    <link rel="manifest" href="manifest.json">-->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navigation.css">
 </head>
-<body>
-<button onclick="exec_py('close')">WYJDŹ</button>
-<button onclick="window.location='game.html'">GRAJ</button>
-<button onclick="window.location='game.html'">GRAJ</button>
+<body class="body">
+    <main class="main">
+        <header class="header">TETRIS</header>
 
+        
+        <nav class="navigation">
+            <button class="button" onclick="exec_py('close')">WYJDŹ</button>
+            <button class="button" onclick="window.location='game.html'">GRAJ</button>
+            <button class="button" onclick="window.location='game.html'">GRAJ</button>
+        </nav>
 
-
-
+        <footer class="footer">Tuatj można dodać jakiś obrazek klocków</footer>
+    </div>
 <script src="scripts.js"></script>
 </body>
 </html>

@@ -1,0 +1,16 @@
+.button{
+    font-size: 40px;
+    background-color: rgba(96, 102, 107, 0.1);
+    color: antiquewhite;
+    margin: 15px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.button:hover{
+    background-color: rgba(96, 102, 107, 0.4);
+}
+
+.button:active{
+    background-color: rgba(96, 102, 107, 0.7);
+}
