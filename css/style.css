@@ -11,5 +11,9 @@ html, .body{
     background-attachment: fixed;
     display: flex;
     justify-content: center;
+    background-repeat: no-repeat;
+    background-position: center;
     align-items: center;
+    background-size: contain;
+    background-color: #161b47;
 }
