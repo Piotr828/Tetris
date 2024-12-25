@@ -31,16 +31,19 @@
     <main class="main">
         <header class="header">TETRIS</header>
 
-        <span class="klocek_menu">Jestem klockiem</span>
+        <span class="klocek_menu" style="left: calc(50vw - 25vh); background-color: lightcoral">Klocek</span>
+        <span class="klocek_menu" style="left: calc(50vw - 35vh + 30vh); animation-delay: 10s ; background-color: darkorange">Inny klocek</span>
+<!--        <span class="klocek_menu" style="background-color: brown">Jestem klockiem</span>-->
+
         <nav class="navigation">
 
             <button class="button" onclick="window.location='game.html'">GRAJ</button>
-            <button class="button" onclick="window.location='game.html'">TUTORIAL</button><br>
-            <button class="button" onclick="window.location='game.html'">RANKING</button>
+            <button class="button" onclick="window.location='tutorial.html'">TUTORIAL</button><br>
+            <button class="button" onclick="window.location='rank.html'">RANKING</button>
             <button class="button" onclick="exec_py('close')">WYJDŹ</button>
         </nav>
 
-        <footer class="footer">Tuatj można dodać jakiś obrazek klocków</footer>
+        <footer class="footer"></footer>
     </div>
     </main>
 <script src="scripts.js"></script>
