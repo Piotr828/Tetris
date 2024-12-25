@@ -10,13 +10,10 @@
     padding-left: 3px;
     padding-right: 3px;
     border: #7b89c5 3px solid;
-    width: calc(50vh - 3px);
-    height: calc(100vh - 14px);
+    width: 50vh;
 }
 header{
     font-family: "My font";
     margin-top: 60px;
     font-size: 40pt;
-    padding-left: 13px;
-    padding-right: 13px;
 }

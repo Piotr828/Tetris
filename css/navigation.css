@@ -19,14 +19,12 @@
     position: absolute;
     font-size: medium;
     animation: drop 10s forwards linear;
-    height: 10vh;
-    line-height: 10dvh;
+    width: 15vh;
     z-index: -1;
-    width: 20vh;
-    bottom: -50vh;
+    bottom: 120vh;
 }
 @keyframes drop{
-from{bottom: 120dvh;}
-to{bottom: 0}
+from{bottom: 120vh; display: block }
+to{bottom: 0; display: block}
 
 }
