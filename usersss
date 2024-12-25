@@ -1,0 +1,9 @@
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login TEXT NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    xp INTEGER DEFAULT 0,
+    best_score INTEGER DEFAULT 0
+);
+SELECT * FROM users;
