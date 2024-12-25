@@ -17,15 +17,16 @@
 }
 .klocek_menu{
     position: absolute;
-    background-color: burlywood;
     font-size: medium;
     animation: drop 10s forwards linear;
-    height: 50px;
-    line-height: 50px;
+    height: 10vh;
+    line-height: 10dvh;
     z-index: -1;
+    width: 20vh;
+    bottom: -50vh;
 }
 @keyframes drop{
-from{bottom: 120vh;}
+from{bottom: 120dvh;}
 to{bottom: 0}
 
 }
