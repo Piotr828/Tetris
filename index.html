@@ -21,8 +21,6 @@
     <!-- Styl okienka (np. minimalizacja stylu przeglądarki dla lepszego efektu aplikacji) -->
     <meta name="application-name" content="Nazwa Twojej aplikacji">
     <meta name="theme-color" content="#000000">
-    <!-- Plik manifestu (jeśli aplikacja wymaga dodatkowych zasobów) -->
-<!--    <link rel="manifest" href="manifest.json">-->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/navigation.css">
@@ -31,9 +29,11 @@
     <main class="main">
         <header class="header">TETRIS</header>
 
-<img src="images/Tetr2.png" class="klocek_menu" style="left: calc(50vw - 25vh - 6px)">
-<!--        <img src="images/Tetr4.png" class="klocek_menu" style="left: calc(50vw - 25vh - 6px)">-->
-<img src="images/Tetr6.png" class="klocek_menu" style=" width: 10vh;left: calc(50vw - 6px - 15vh); animation-delay: 10s">
+<img src="images/Tetr2.png" class="klocek_menu" style="left: calc(50vw - 25vh); animation-delay: 0s">
+<img src="images/Tetr4.png" class="klocek_menu" style="left: calc(50vw - 15vh); animation-delay: 10s">
+<img src="images/Tetr6.png" class="klocek_menu" style="left: calc(50vw); animation-delay: 20s">
+
+
         <nav class="navigation">
 
             <button class="button" onclick="window.location='game.html'">GRAJ</button>

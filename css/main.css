@@ -1,19 +1,23 @@
 .main{
     display: flex;
-    height: calc(100vh - 6px);
+    height: 100vh;
+    width: 50dvh;
     font-size: 40px;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    justify-content: space-between;
+    justify-content: space-around;
     color: aliceblue;
-    padding-left: 3px;
-    padding-right: 3px;
-    border: #7b89c5 3px solid;
-    width: 50vh;
+    background-image: url("../images/board.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 0;
 }
 header{
     font-family: "My font";
     margin-top: 60px;
     font-size: 40pt;
+    color: #fff;
+text-shadow: 1px 1px 0px #cccccc, 0px 0px 3px rgba(255, 255, 255, 0.6);
 }
