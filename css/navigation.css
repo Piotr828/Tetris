@@ -1,6 +1,6 @@
 .button {
     font-size: 30px;
-    background-color: rgba(96, 102, 107, 0.1);
+    background-color: rgba(96, 102, 107, 0.2);
     color: antiquewhite;
     margin: 15px;
     padding: 10px 20px; /* Zwiększenie paddingu dla lepszego wyglądu */
@@ -14,7 +14,7 @@
 
 
 .button:hover{
-    background-color: rgba(96, 102, 107, 0.4);
+    background-color: rgba(96, 102, 107, 0.5);
 }
 
 .button:active{
@@ -23,13 +23,43 @@
 .klocek_menu{
     position: absolute;
     font-size: medium;
-    animation: drop 10s forwards linear;
     width: 20vh;
     z-index: -1;
     bottom: 120vh;
 }
+
+.klocek{
+    animation: drop 10s forwards linear;
+}
+
 @keyframes drop{
 from{bottom: 120vh; display: block }
 to{bottom: 0; display: block}
-
 }
+
+.klocek2 {
+    animation: drop2 10s forwards linear;
+}
+
+@keyframes drop2{
+    from{bottom: 120vh; display: block }
+    to{bottom: 5vh; display: block}
+    }
+
+.klocek3{
+    animation: drop3 10s forwards linear;
+}
+
+@keyframes drop3{
+    from{bottom: 120vh; display: block }
+    to{bottom: 10vh; display: block}
+    }
+
+.klocek4{
+    animation: drop4 10s forwards linear;
+}
+
+@keyframes drop4{
+    from{bottom: 120vh; display: block }
+    to{bottom: 15vh; display: block}
+    }
