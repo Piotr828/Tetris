@@ -1,6 +1,6 @@
 .button {
     font-size: 30px;
-    background-color: rgba(96, 102, 107, 0.2);
+    background-color: rgba(96, 102, 107, 0.5);
     color: antiquewhite;
     margin: 15px;
     padding: 10px 20px; /* Zwiększenie paddingu dla lepszego wyglądu */
@@ -14,11 +14,11 @@
 
 
 .button:hover{
-    background-color: rgba(96, 102, 107, 0.5);
+    background-color: rgba(96, 102, 107, 0.7);
 }
 
 .button:active{
-    background-color: rgba(96, 102, 107, 0.7);
+    background-color: rgba(96, 102, 107, 0.9);
 }
 .klocek_menu{
     position: absolute;
@@ -38,7 +38,7 @@ to{bottom: 0; display: block}
 }
 
 .klocek2 {
-    animation: drop2 10s forwards linear;
+    animation: drop2 9.5s forwards linear;
 }
 
 @keyframes drop2{
@@ -47,7 +47,7 @@ to{bottom: 0; display: block}
     }
 
 .klocek3{
-    animation: drop3 10s forwards linear;
+    animation: drop3 9s forwards linear;
 }
 
 @keyframes drop3{
@@ -56,10 +56,118 @@ to{bottom: 0; display: block}
     }
 
 .klocek4{
-    animation: drop4 10s forwards linear;
+    animation: drop4 8.5s forwards linear;
 }
 
 @keyframes drop4{
     from{bottom: 120vh; display: block }
     to{bottom: 15vh; display: block}
+    }
+
+.flip{
+    transform: rotate(90deg);
+}
+
+.flip2{
+    transform: rotate(180deg);
+}
+
+
+.klocek5{
+    animation: drop5 8s forwards linear;
+}
+
+@keyframes drop5{
+    from{bottom: 120vh; display: block }
+    to{bottom: 5vh; display: block}
+    }
+
+.klocek6{
+    animation: drop6 8s forwards linear;
+}
+
+@keyframes drop6{
+    from{bottom: 120vh; display: block }
+    to{bottom: 20vh; display: block}
+    }
+
+.klocek7{
+    animation: drop7 8s forwards linear;
+}
+
+@keyframes drop7{
+    from{bottom: 120vh; display: block }
+    to{bottom: 25vh; display: block}
+    }
+
+.klocek8{
+    animation: drop8 8s forwards linear;
+}
+
+@keyframes drop8{
+    from{bottom: 120vh; display: block }
+    to{bottom: 30vh; display: block}
+    }
+
+.klocek35{
+    animation: drop35 8s forwards linear;
+}
+
+@keyframes drop35{
+    from{bottom: 120vh; display: block }
+    to{bottom: 35vh; display: block}
+    }
+
+.klocek9{
+    animation: drop9 8s forwards linear;
+}
+
+@keyframes drop9{
+    from{bottom: 120vh; display: block }
+    to{bottom: 40vh; display: block}
+    }
+
+.klocek45{
+    animation: drop45 8s forwards linear;
+}
+
+@keyframes drop45{
+    from{bottom: 120vh; display: block }
+    to{bottom: 45vh; display: block}
+    }
+
+.klocek10{
+    animation: drop10 8s forwards linear;
+}
+
+@keyframes drop10{
+    from{bottom: 120vh; display: block }
+    to{bottom: 50vh; display: block}
+    }
+
+.klocek11{
+    animation: drop11 8s forwards linear;
+}
+
+@keyframes drop11{
+    from{bottom: 120vh; display: block }
+    to{bottom: 55vh; display: block}
+    }
+
+.klocek12{
+    animation: drop12 8s forwards linear;
+}
+
+@keyframes drop12{
+    from{bottom: 120vh; display: block }
+    to{bottom: 60vh; display: block}
+    }
+
+.klocek13{
+    animation: drop13 8s forwards linear;
+}
+
+@keyframes drop13{
+    from{bottom: 120vh; display: block }
+    to{bottom: 65vh; display: block}
     }
