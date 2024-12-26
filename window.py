@@ -2,7 +2,7 @@ import webview
 import importlib
 # Dynamiczne załadowanie funkcji z api.py
 api_module = importlib.import_module('main')
-
+webview.config(gui='cef')
 # Klasa API do obsługi wywołań z JavaScript
 class API:
     def call_function(self, function_name, args):

@@ -23,9 +23,9 @@
 .klocek_menu{
     position: absolute;
     font-size: medium;
-    width: 20vh;
+    width: 20dvh;
     z-index: -1;
-    bottom: 120vh;
+    bottom: 120dvh;
 }
 
 .klocek{
@@ -33,8 +33,8 @@
 }
 
 @keyframes drop{
-from{bottom: 120vh; display: block }
-to{bottom: 0; display: block}
+0%{bottom: 120dvh;}
+100%{bottom: 0;}
 }
 
 .klocek2 {
@@ -42,8 +42,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop2{
-    from{bottom: 120vh; display: block }
-    to{bottom: 5vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 5dvh;}
     }
 
 .klocek3{
@@ -51,8 +51,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop3{
-    from{bottom: 120vh; display: block }
-    to{bottom: 10vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 10dvh;}
     }
 
 .klocek4{
@@ -60,8 +60,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop4{
-    from{bottom: 120vh; display: block }
-    to{bottom: 15vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 15dvh;}
     }
 
 .flip{
@@ -78,8 +78,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop5{
-    from{bottom: 120vh; display: block }
-    to{bottom: 5vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 5dvh;}
     }
 
 .klocek6{
@@ -87,8 +87,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop6{
-    from{bottom: 120vh; display: block }
-    to{bottom: 20vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 20dvh;}
     }
 
 .klocek7{
@@ -96,8 +96,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop7{
-    from{bottom: 120vh; display: block }
-    to{bottom: 25vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 25dvh;}
     }
 
 .klocek8{
@@ -105,8 +105,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop8{
-    from{bottom: 120vh; display: block }
-    to{bottom: 30vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 30dvh;}
     }
 
 .klocek35{
@@ -114,8 +114,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop35{
-    from{bottom: 120vh; display: block }
-    to{bottom: 35vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 35dvh;}
     }
 
 .klocek9{
@@ -123,8 +123,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop9{
-    from{bottom: 120vh; display: block }
-    to{bottom: 40vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 40dvh;}
     }
 
 .klocek45{
@@ -132,8 +132,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop45{
-    from{bottom: 120vh; display: block }
-    to{bottom: 45vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 45dvh;}
     }
 
 .klocek10{
@@ -141,8 +141,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop10{
-    from{bottom: 120vh; display: block }
-    to{bottom: 50vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 50dvh;}
     }
 
 .klocek11{
@@ -150,8 +150,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop11{
-    from{bottom: 120vh; display: block }
-    to{bottom: 55vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 55dvh;}
     }
 
 .klocek12{
@@ -159,8 +159,8 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop12{
-    from{bottom: 120vh; display: block }
-    to{bottom: 60vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 60dvh;}
     }
 
 .klocek13{
@@ -168,6 +168,6 @@ to{bottom: 0; display: block}
 }
 
 @keyframes drop13{
-    from{bottom: 120vh; display: block }
-    to{bottom: 65vh; display: block}
+    0%{bottom: 120dvh;}
+    100%{bottom: 65dvh;}
     }
