@@ -69,12 +69,38 @@ function usunPelneWiersze(plansza) { // usuwa wiersze gdzie sa same 1
     return plansza.filter(row => row.includes(0));
 }
 
-function startgame(){
+function pobierzKlocek(nazwaKlocka){ // zwraca macież klocka przy podaniu jego nazwy
+    return klocki[nazwaKlocka]
+}
+
+function obliczWymiaryKlocka(klocek) { // oblicza wymiary podanego klocka
+    let wysokosc = 0;
+    let szerokosc = 0;
+
+    for (let i = 0; i < a.length; i++) {
+        if (klocek[i].some(val => val === 1)) {
+            wysokosc++;
+        }
+    }
+
+    for (let j = 0; j < klocek[0].length; j++) {
+        for (let i = 0; i < klocek.length; i++) {
+            if (klocek[i][j] === 1) {
+                szerokosc++;
+                break;
+            }
+        }
+    }
+
+    return { szerokosc, wysokosc };
+}
+
+function startgame(width){
     document.addEventListener('keydown', function(event) {
         // Sprawdzanie naciśnięcia strzałki w prawo lub 'd'
         if (event.key === 'ArrowRight' || event.key === 'd') {
             console.log('Strzałka w prawo lub d');
-            if(column < 10){
+            if(column < 11-width){
                 column += 1;
             }
             document.getElementById("main").innerText += ">"
@@ -92,9 +118,14 @@ function startgame(){
         // Sprawdzanie naciśnięcia strzałki w dół, 's' lub spacji
         else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') {
             console.log('Strzałka w dół, s lub spacja');
-            if(row < 20)
+            if(row > 0){
+                row -= 1;
+            }
+            console.log(row);
             document.getElementById("main").innerText += "v"
             // Dodaj odpowiednią akcję tutaj
         }
     });
 }
+
+startgame();
