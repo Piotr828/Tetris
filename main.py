@@ -17,16 +17,16 @@ def print_rotaded(T,d):
     for row in rotaded:
         print(row)
 
-
+#funkcja umieszcza figure(piece-tablica 4x4) na planszy(board(20x20) w kolumnie(column)
 def apply_piece_to_board(board, piece, column):
     rows, cols = len(board), len(board[0])
-
+#stworzenie listy ze wspolrzendnymi i kolorem figury 
     piece_shape = []
     for i in range(4):
         for j in range(4):
             if piece[i][j] != []:
                 piece_shape.append((i, j, piece[i][j]))
-
+#wyszukiwanie najnizszej pozycji do umieszczenia figury 
     lowest_row = rows - 1
     for r in range(rows):
         for row_piece, col_piece, color in piece_shape:
@@ -39,11 +39,12 @@ def apply_piece_to_board(board, piece, column):
         else:
             continue
         break
+#wypisanie game over jesli figura sie nie miesci 
     if lowest_row < 0:
         return "Game Over"
 
     new_board = [row[:] for row in board]
-
+#dodanie figury do nowej kopii planszy
     for row_piece, col_piece, color in piece_shape:
         new_board[lowest_row + row_piece][column + col_piece] = color
 
