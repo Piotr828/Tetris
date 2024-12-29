@@ -46,28 +46,29 @@ const klocki = {
 const matrix = document.getElementById("main_js");
 const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
 kolor = kolory[Math.floor(Math.random()*kolory.length)];
-let row = 0; // wiersz klocka
- // kolumna klocka
+
+
 let klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
 const rows = 20;
 const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 
 let column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
+let row = Math.floor((rows / 4) - (klocek.length / 2));
 
-// function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
-//     for (let i = 0; i < klocek.length; i++) {
-//         for (let j = 0; j < klocek[i].length; j++) {
-//             if (klocek[i][j] === 1) {
-//                 const row = startRow + i;
-//                 const col = startCol + j;
-//                 if (row >= 0 && row < plansza.length && col >= 0 && col < plansza[0].length) {
-//                     plansza[row][col] = 1;
-//                 }
-//             }
-//         }
-//     }
-// }
+function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
+    for (let i = 0; i < klocek.length; i++) {
+        for (let j = 0; j < klocek[i].length; j++) {
+            if (klocek[i][j] === 1) {
+                const row = startRow + i;
+                const col = startCol + j;
+                if (row >= 0 && row < plansza.length && col >= 0 && col < plansza[0].length) {
+                    plansza[row][col] = 1;
+                }
+            }
+        }
+    }
+}
 
 function usunPelneWiersze(plansza) { // usuwa wiersze gdzie sa same 1 i dodaje z 0 na górze
     const noweWiersze = plansza.filter(row => row.includes(0));
@@ -98,36 +99,28 @@ function szerokosc(T) {
   return right - left + 1;
 }
 
+function rysujKlocek(klocek, kolor, column, row) {
+    const nr = parseInt(Object.values(klocki).indexOf(klocek)) + 1;
+    const margin = 5 * column - 15;
+    const height = 5* row + 15;
+    document.getElementById("main_js").innerHTML =
+        `<img style="bottom: ${height}vh; position: relative; left:${margin}vh" 
+        class="klocek_menu" src="images/Tetr${nr}_${kolor}.png">`;
+}
+
+function przesunKlocek(kierunek) {
+    if (kierunek === 'left' && column > 0) column--;
+    if (kierunek === 'right' && column < 10 - szerokosc(klocek)) column++;
+    if (kierunek === 'down' && row > -11) row--;
+    rysujKlocek(klocek, kolor, column, row);
+}
+
 function startgame(){
 
-    let nr = parseInt(Object.values(klocki).indexOf(klocek))
-    nr++
-    let margin = 5*parseInt(column)-15
-    document.getElementById("main_js").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';
     document.addEventListener('keydown', function(event) {
-        // Sprawdzanie naciśnięcia strzałki w prawo lub 'd'
-        if (event.key === 'ArrowRight' || event.key === 'd') {
-            if(column < 10 - szerokosc(klocek)){
-                column += 1;
-            }
- }
-        // Sprawdzanie naciśnięcia strzałki w lewo lub 'a'
-        else if (event.key === 'ArrowLeft' || event.key === 'a') {
-            console.log('Strzałka w lewo lub a');
-            if(column > 0){
-                column -= 1;
-            }
-        // Sprawdzanie naciśnięcia strzałki w dół, 's' lub spacji
-        else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') {
-            // szybkie spadanie
-            }
-        }
-
-        let nr = parseInt(Object.values(klocki).indexOf(klocek))
-                nr++
-                let margin = 5*parseInt(column)-15
-            document.getElementById("main_js").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';
-
+        if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
+        else if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
+        else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') przesunKlocek('down');
     });
 
 }
