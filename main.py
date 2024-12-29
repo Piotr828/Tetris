@@ -3,7 +3,7 @@ def close():
     import os
     os._exit(0)
 
-def rotade(T,d):
+def rotate(T,d):
     if d not in [-1,1]:
         raise ValueError
     if len(T)!=4 or any(len(row)!=4 for row in T):
@@ -12,9 +12,9 @@ def rotade(T,d):
         return [[T[3 - j][i] for j in range(4)] for i in range(4)]
     elif d==-1:
         return [[T[j][3 - i] for j in range(4)] for i in range(4)]
-def print_rotaded(T,d):
-    rotaded=rotade(T,d)
-    for row in rotaded:
+def print_rotated(T,d):
+    rotated=rotate(T,d)
+    for row in rotated:
         print(row)
 
 #funkcja umieszcza figure(piece-tablica 4x4) na planszy(board(20x20) w kolumnie(column)

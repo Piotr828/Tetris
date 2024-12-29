@@ -45,16 +45,13 @@ const klocki = {
 
 const matrix = document.getElementById("main_js");
 const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
-kolor = kolory[Math.floor(Math.random()*kolory.length)];
 
-
-let klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
 const rows = 20;
 const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 
-let column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
-let row = Math.floor((rows / 4) - (klocek.length / 2));
+let klocek, row, column, kolor;
+
 
 function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
     for (let i = 0; i < klocek.length; i++) {
@@ -109,18 +106,26 @@ function rysujKlocek(klocek, kolor, column, row) {
 }
 
 function przesunKlocek(kierunek) {
-    if (kierunek === 'left' && column > 0) column--;
-    if (kierunek === 'right' && column < 10 - szerokosc(klocek)) column++;
+    if (kierunek === 'left' && column > 0  && row > -11) column--;
+    if (kierunek === 'right' && column < 10 - szerokosc(klocek) && row > -11) column++;
     if (kierunek === 'down' && row > -11) row--;
     rysujKlocek(klocek, kolor, column, row);
 }
 
 function startgame(){
+    klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
+    row = 9;
+    column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
+    kolor = kolory[Math.floor(Math.random()*kolory.length)];
 
+    rysujKlocek(klocek, kolor, column, row);
     document.addEventListener('keydown', function(event) {
         if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
         else if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
         else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') przesunKlocek('down');
     });
 
+    intervalId = setInterval(() => {
+        przesunKlocek('down');
+    }, 500);
 }
