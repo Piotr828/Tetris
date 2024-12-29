@@ -6,6 +6,9 @@ function reloadCSS() {
         document.getElementById('toreload').href = document.getElementById('toreload').href + "?v="+currentTime
     }
 }
+
+if(navigator.userAgent[0] == 'M'){
+
 window.addEventListener('resize', function() {
     reloadCSS()
-});
+});}
