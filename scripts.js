@@ -94,6 +94,12 @@ function szerokosc(T) {
 
 
 function startgame(){
+
+    let nr = parseInt(Object.values(klocki).indexOf(klocek))
+    nr++
+    let margin = 5*parseInt(column)-15
+    document.getElementById("main").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';
+
     document.addEventListener('keydown', function(event) {
         // Sprawdzanie naciśnięcia strzałki w prawo lub 'd'
         if (event.key === 'ArrowRight' || event.key === 'd') {
@@ -101,10 +107,7 @@ function startgame(){
             if(column < 10 - szerokosc(klocek)){
                 column += 1;
             }
- let nr = parseInt(Object.values(klocki).indexOf(klocek))
-                nr++
-                let margin = 5*parseInt(column)-15
-            document.getElementById("main").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';        }
+ }
 
         // Sprawdzanie naciśnięcia strzałki w lewo lub 'a'
         else if (event.key === 'ArrowLeft' || event.key === 'a') {
@@ -112,20 +115,20 @@ function startgame(){
             if(column > 0){
                 column -= 1;
             }
- let nr = parseInt(Object.values(klocki).indexOf(klocek))
-                nr++
-                let margin = 5*parseInt(column)-15
-            document.getElementById("main").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';        }
+     }
 
         // Sprawdzanie naciśnięcia strzałki w dół, 's' lub spacji
         else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') {
             console.log('Strzałka w dół, s lub spacja');
             if(row < 20){
-                let nr = parseInt(Object.values(klocki).indexOf(klocek))
-                nr++
-                let margin = 5*parseInt(column)-15
-            document.getElementById("main").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';
+
             }
         }
+        let nr = parseInt(Object.values(klocki).indexOf(klocek))
+        nr++
+        let margin = 5*parseInt(column)-15
+        document.getElementById("main").innerHTML = '<img style="bottom: 0vh; position: relative; left:'+margin+'vh" class="klocek_menu" src="images/Tetr'+nr+ '_' +kolor+ '.png">';
+
     });
+
 }
