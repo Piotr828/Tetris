@@ -70,7 +70,22 @@ def is_valid_email(email):
         elif char == "." and has_at:  # czy zawiera '.' po '@'
             has_dot_after_at = True
     return has_at and has_dot_after_at and at_index < len(email) - 1
-
+    
+#warunki do możliwości wprowadzenia hasła: min. jedna duża,mała litera;min. jedna cyfra;min. 5 znaków
+def is_valid_password(password):
+    has_low_ch= False
+    has_up_ch=False
+    has_digit=False
+    if len(password)<5:
+        return False
+    for char in password:
+        if char.islower():
+            has_low_ch=True
+        elif char.isupper():
+            has_up_ch=True
+        elif char.isdigit():
+            has_digit=True
+    return has_digit and has_up_ch and has_low_ch
 
 def register(login,password,email):
     # sprawdzenie poprawnosci maila
@@ -118,7 +133,10 @@ def register(login,password,email):
     
     def log(login,password):
     #haszowanie hasła
-    hashed_password=hashowanie_hasla(password)
+    if is_valid_password(password):
+        hashed_password=hashowanie_hasla(password)
+    else:
+        return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz 
     try:
         #łączenie z bazą danych
         db_connection = mysql.connector.connect(
