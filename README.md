@@ -19,5 +19,8 @@ Projekt należy uruchomić za pomocą konfiguracji "start" lub poprzez plik wind
 ### Niezbędne paczki:
 * **PyView**
     * ```pip install pywebview```
+* importlib
+  * Paczka wbudowana - instalacja nie jest wymagana
+
 * **json**
     * Paczka wbudowana - instalacja nie jest wymagana

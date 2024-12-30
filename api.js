@@ -7,8 +7,10 @@ function reloadCSS() {
     }
 }
 
-if(navigator.userAgent[0] == 'M'){
 
 window.addEventListener('resize', function() {
+    if(navigator.userAgent[0] == 'M'){
     reloadCSS()
-});}
+        }
+    if(window.innerWidth < window.innerHeight) console.error("Granie w trybie pionowym jest niezalecane")
+});

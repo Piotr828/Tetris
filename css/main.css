@@ -13,6 +13,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     z-index: 0;
+    bottom: 0;
 }
 header{
     font-family: "My font";

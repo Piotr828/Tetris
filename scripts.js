@@ -33,23 +33,24 @@ const klocki = {
         [0, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 1, 0, 0],
-        [0, 1, 0, 0],
+        [0, 1, 0, 0]
     ],
     klocek7: [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [1, 1, 1, 0],
-        [1, 0, 0, 0],
-    ],
+        [1, 0, 0, 0]
+    ]
 };
-
+// zmienna przechowująca liczbę usuniętych wierszy; potrzebna do liczenia XP oraz prędkości upadku
+let usuniete = 0;
 const matrix = document.getElementById("main_js");
 const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
 
 const rows = 20;
 const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
-
+let orientation = 0;
 let klocek, row, column, kolor;
 
 
@@ -100,32 +101,56 @@ function rysujKlocek(klocek, kolor, column, row) {
     const nr = parseInt(Object.values(klocki).indexOf(klocek)) + 1;
     const margin = 5 * column - 15;
     const height = 5* row + 15;
-    document.getElementById("main_js").innerHTML =
-        `<img style="bottom: ${height}vh; position: relative; left:${margin}vh" 
+    let deg = (90*orientation)%360 + 'deg'
+    document.getElementById("p_cont").innerHTML =
+        `<img style="transform-origin: center; ;bottom: ${height}vh; position: relative; left:${margin}vh; transform: rotate(${deg})" 
         class="klocek_menu" src="images/Tetr${nr}_${kolor}.png">`;
 }
+
 
 function przesunKlocek(kierunek) {
     if (kierunek === 'left' && column > 0  && row > -11) column--;
     if (kierunek === 'right' && column < 10 - szerokosc(klocek) && row > -11) column++;
-    if (kierunek === 'down' && row > -11) row--;
+    if (kierunek === 'down' && row > -10) {row--;}
+    else if (kierunek === 'down' && row > -11) {row = -11;}
+    if (kierunek === 'drop' && row > -11) row-= (1+usuniete*0.18)*1/60;
     rysujKlocek(klocek, kolor, column, row);
 }
-
+klocek_clone = klocek
+async function obrocKlocek(kierunek) {
+    if (row <= -11)
+        return 0;
+    orientation += kierunek;  // Zmieniamy orientation po zakończeniu obrotu
+    // Używamy await, żeby poczekać na wynik funkcji exec_py
+    let nowe = await exec_py('rotate', klocek_clone, kierunek);
+// klocek = nowe;  // Przypisujemy wynik zwrócony przez exec_py do zmiennej klocek
+console.log(nowe)
+}
 function startgame(){
     klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
     row = 9;
     column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
     kolor = kolory[Math.floor(Math.random()*kolory.length)];
-
     rysujKlocek(klocek, kolor, column, row);
+
     document.addEventListener('keydown', function(event) {
         if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
         else if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
         else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') przesunKlocek('down');
+        else if (event.key === 'e' || event.key === '.' ) obrocKlocek(1);
+        else if (event.key === 'q' || event.key === ',') obrocKlocek(-1);
+
     });
 
     intervalId = setInterval(() => {
-        przesunKlocek('down');
-    }, 500);
+        przesunKlocek('drop');
+        if (row < -11){clearInterval(intervalId)}
+    }, 17);
+
+
 }
+// funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
+function putpixel(color,x,y){
+    document.getElementById("main_js").innerHTML += `<img src="images/square_${color}.png" style="width: 5vh; left: calc(${(x-6)*5}vh + 50vw); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
+}
+
