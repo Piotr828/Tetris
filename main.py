@@ -103,7 +103,10 @@ def register(login,password,email):
         if not (char.isalnum() or char == "_"):
             return "Login może zawierać tylko litery, cyfry i znak '_'."
     #haszowanie hasla
-    hashed_password = hashowanie_hasla(password)
+    if is_valid_password(password):
+        hashed_password=hashowanie_hasla(password)
+    else:
+        return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz jedną cyfrę"
 
     try:
         #łączenie z bazą danych
@@ -131,12 +134,10 @@ def register(login,password,email):
         return Exception("Błąd bazy danych.")
 
     
-    def log(login,password):
-    #haszowanie hasła
-    if is_valid_password(password):
-        hashed_password=hashowanie_hasla(password)
-    else:
-        return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz 
+def log(login,password):
+#haszowanie hasła
+    hashed_password=hashowanie_hasla(password)
+    
     try:
         #łączenie z bazą danych
         db_connection = mysql.connector.connect(
@@ -165,3 +166,49 @@ def register(login,password,email):
 
     except mysql.connector.Error:
         return "Błąd bazy danych."
+
+#pobranie xp użytkownika z bazy
+def loadxp(login):
+    try:
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+        cursor.execute("SELECT xp FROM users WHERE login = %s",(login,)) #pobranie xp
+        result=cursor.fetchone()
+        #sprawdzenie czy użytkownik istnieje
+        if result:
+            xp =result[0]
+            cursor.close()
+            db_connection.close()
+            return xp #wypisanie xp
+        else:
+            cursor.close()
+            db_connection.close()
+            return "Użytkownik o podanej nazwie nie istnieje"
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
+
+#zwracanie loginow użytkownikow wraz z xp posortowanych malejąco według xp
+def leaderboard():
+    try:
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+        cursor.execute("SELECT login, xp FROM users ORDER BY xp DESC")
+        result=cursor.fetchall()
+        ranking=[[login,xp] for login,xp in result]
+        cursor.close()
+        db_connection.close()
+        return ranking
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
