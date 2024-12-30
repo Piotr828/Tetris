@@ -41,3 +41,76 @@ def apply_piece_to_board(board, piece, column):
         new_board[lowest_row + row_piece][column + col_piece] = color
 
     return new_board
+    
+import os
+import hashlib
+import mysql.connector
+
+def hashowanie_hasla(password):
+    #haszuje hasło przy użyciu algorytmu SHA-256.
+    hash_object = hashlib.sha256()
+    hash_object.update(password.encode()) #zamiana hasła na ciąg bajtów
+    return hash_object.hexdigest() #zwraca hasło jako ciąg znaków
+
+def ping_domena(domena):
+    return os.system(f"ping -c 1 {domena} > /dev/null 2>&1") == 0 #jesli zwraca 0 to znaczy ze domena istnieje
+
+#sprawdzenie czy email zawiera jedna "@" i co najmniej jedna "." po "@"
+def is_valid_email(email):
+    has_at = False
+    has_dot_after_at = False
+    at_index = -1
+
+    for i, char in enumerate(email):
+        if char == "@":
+            if has_at:  #więcej niż jedno '@'
+                return False
+            has_at = True
+            at_index = i
+        elif char == "." and has_at:  # czy zawiera '.' po '@'
+            has_dot_after_at = True
+    return has_at and has_dot_after_at and at_index < len(email) - 1
+
+
+def register(login,password,email):
+    # sprawdzenie poprawnosci maila
+    domena=email.split("@")[-1]
+
+    if not is_valid_email(email):
+        return "Nieprawidłowy adres e-mail."
+
+    #sprawdzenie czy mail istnieje za pomoca pingowania
+    if not ping_domena(domena):
+        return "Nieprawidłowy adres e-mail"
+
+    #sprawdzenie czy login jest alfanumeryczny i czy nie zawiera innych znaków specjalnych oprócz "_"
+    for char in login:
+        if not (char.isalnum() or char == "_"):
+            return "Login może zawierać tylko litery, cyfry i znak '_'."
+    #haszowanie hasla
+    hashed_password = hashowanie_hasla(password)
+
+    try:
+        #łączenie z bazą danych
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+
+        #zapisywanie danych użytkownika podanych przy rejestracji w bazie danych
+        query = "INSERT INTO users (login, password, email) VALUES (%s, %s, %s)"
+        cursor.execute(query, (login, hashed_password, email)) #przesłanie zapytania sql do bazy danych
+        #zatwierdzenie zmian w bazie danych
+        db_connection.commit()
+
+        # zamknięcie połączenia
+        cursor.close()
+        db_connection.close()
+        return "Użytkownik zarejestrowany pomyślnie."
+
+    except mysql.connector.Error:
+        return Exception("Błąd bazy danych.")
