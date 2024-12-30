@@ -114,3 +114,36 @@ def register(login,password,email):
 
     except mysql.connector.Error:
         return Exception("Błąd bazy danych.")
+
+    
+    def log(login,password):
+    #haszowanie hasła
+    hashed_password=hashowanie_hasla(password)
+    try:
+        #łączenie z bazą danych
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+        query = "SELECT password FROM users WHERE login = %s" #pobranie hasła przypisanego do podanego loginu
+        cursor.execute(query,(login,))
+        result=cursor.fetchone()
+        #nieprawidłowy login
+        if result is None:
+            return "Nie znaleziono nazwy użytkownika."
+        saved_password=result[0]
+        #zamkniecie połączenia
+        cursor.close()
+        db_connection.close()
+        #porównanie pobranego hasła z bazy z podanym przy logowaniu
+        if hashed_password==saved_password:
+            return "Zalogowano."
+        else:
+            return "Nieprawidłowe hasło."
+
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
