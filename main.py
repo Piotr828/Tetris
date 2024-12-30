@@ -166,6 +166,33 @@ def log(login,password):
 
     except mysql.connector.Error:
         return "Błąd bazy danych."
+        
+def save(login,xp):
+    try:
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+        #sprawdzenie czy użytkownik o tej nazwie istnieje w bazie danych
+        cursor.execute("SELECT COUNT(*) FROM users WHERE login = %s", (login,))
+        result = cursor.fetchone()
+        if result[0]==0:
+            cursor.close()
+            db_connection.close()
+            return "Użytkownik o podanej nazwie nie istnieje"
+        #aktualizacja xp
+        query = "UPDATE users SET xp = %s WHERE login = %s"
+        cursor.execute(query,(xp,login))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return "Zaktualizowano XP użytkownika"
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
 
 #pobranie xp użytkownika z bazy
 def loadxp(login):
