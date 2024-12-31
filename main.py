@@ -1,6 +1,9 @@
 import webview
+import os
+import hashlib
+import mysql.connector
+
 def close():
-    import os
     os._exit(0)
 
 def rotate(T,d):
@@ -41,10 +44,6 @@ def apply_piece_to_board(board, piece, column):
         new_board[lowest_row + row_piece][column + col_piece] = color
 
     return new_board
-    
-import os
-import hashlib
-import mysql.connector
 
 def hashowanie_hasla(password):
     #haszuje hasło przy użyciu algorytmu SHA-256.

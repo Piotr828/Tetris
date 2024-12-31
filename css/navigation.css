@@ -21,7 +21,7 @@
     background-color: rgba(96, 102, 107, 0.9);
 }
 .klocek_menu{
-    position: absolute;
+    position: fixed;
     font-size: medium;
     width: 20dvh;
     z-index: -1;
