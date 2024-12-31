@@ -42,6 +42,7 @@ const klocki = {
         [1, 0, 0, 0]
     ]
 };
+
 // zmienna przechowująca liczbę usuniętych wierszy; potrzebna do liczenia XP oraz prędkości upadku
 let usuniete = 0;
 const matrix = document.getElementById("main_js");
@@ -52,6 +53,7 @@ const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 let orientation = 0;
 let klocek, row, column, kolor;
+const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4]
 
 
 function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
@@ -77,24 +79,24 @@ function usunPelneWiersze(plansza) { // usuwa wiersze gdzie sa same 1 i dodaje z
 }
 
 function szerokosc(T) {
-  let left = T[0].length;  // Inicjalizujemy lewe ograniczenie jako liczbę kolumn
-  let right = -1;  // Inicjalizujemy prawe ograniczenie jako -1
+    let left = T[0].length;  // Inicjalizujemy lewe ograniczenie jako liczbę kolumn
+    let right = -1;  // Inicjalizujemy prawe ograniczenie jako -1
 
-  // Przechodzimy przez całą tablicę i szukamy pierwszej i ostatniej kolumny z danymi
-  for (let i = 0; i < T.length; i++) {
-    for (let j = 0; j < T[i].length; j++) {
-      if (T[i][j] !== null && T[i][j] !== undefined && T[i][j] !== ''&& T[i][j] !== 0) {
-        left = Math.min(left, j); // Pierwsza kolumna z danymi
-        right = Math.max(right, j); // Ostatnia kolumna z danymi
-      }
+    // Przechodzimy przez całą tablicę i szukamy pierwszej i ostatniej kolumny z danymi
+    for (let i = 0; i < T.length; i++) {
+        for (let j = 0; j < T[i].length; j++) {
+        if (T[i][j] !== null && T[i][j] !== undefined && T[i][j] !== ''&& T[i][j] !== 0) {
+            left = Math.min(left, j); // Pierwsza kolumna z danymi
+            right = Math.max(right, j); // Ostatnia kolumna z danymi
+        }
+        }
     }
-  }
 
-  // Jeśli nie znaleziono żadnych danych, zwracamy 0
-  if (right === -1) return 0;
+    // Jeśli nie znaleziono żadnych danych, zwracamy 0
+    if (right === -1) return 0;
 
-  // Liczymy liczbę kolumn między pierwszą a ostatnią kolumną z danymi
-  return right - left + 1;
+    // Liczymy liczbę kolumn między pierwszą a ostatnią kolumną z danymi
+    return right - left + 1;
 }
 
 function rysujKlocek(klocek, kolor, column, row) {
@@ -126,8 +128,20 @@ async function obrocKlocek(kierunek) {
 // klocek = nowe;  // Przypisujemy wynik zwrócony przez exec_py do zmiennej klocek
 console.log(nowe)
 }
+
+function wybierzKlocek(pozycja, numerKlocka){
+    const wybranySlownik = wszystkieKlocki[pozycja - 1];
+    const wybranyKlocek = wybranySlownik[`klocek${numerKlocka}`];
+    return wybranyKlocek;
+}
+
+let klocekDoPlanszy;
+
 function startgame(){
+    let pozycja = 1;
     klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
+    numerKlocka = Math.ceil(Math.random()*7);
+    //klocekDoPlanszy = wybierzKlocek(pozycja, numerKlocka);
     row = 9;
     column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
     kolor = kolory[Math.floor(Math.random()*kolory.length)];
