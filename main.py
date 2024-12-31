@@ -266,3 +266,54 @@ def leaderboard():
         return ranking
     except mysql.connector.Error:
         return "Błąd bazy danych"
+
+#generowanie nowego hasła
+import string
+import random
+def generate_new_password(length=5): #na wstępie ustalamy długość 5 aby była zgodna z wymaganiami
+#tworzenie nowego hasła zgodnie z wymaganiami
+    password = (
+        random.choice(string.ascii_lowercase) +  # conajmniej 1 mała litera
+        random.choice(string.ascii_uppercase) +  # conajmniej 1 duża litera
+        random.choice(string.digits) +          # conajmniej 1 cyfra
+        ''.join(random.choices(string.ascii_letters + string.digits, k=length - 3)) #wybieranie dwóch dodatkowych znakow z liter i cyfr
+    )
+
+    #losowe mieszanie wszystkich znaków w długości hasła
+    password = ''.join(random.sample(password, len(password)))
+    return password
+
+def reset_password(email):
+    try:
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+        #sprawdzenie czy email jest w bazie danych
+        query = "SELECT last_password_change FROM users WHERE email = %s"
+        cursor.execute(query,(email,))
+        result = cursor.fetchone()
+        if not result:
+            return "Podany email nie jest zarejestrowany."
+        last_change=result[0]
+        now =datetime.now()
+        #sprawdzenie czy od ostatniej zmiany hasła minęło 30 dni od czasu obecnego
+        if (now-last_change).total_seconds()<2592000:
+            return "Hasło można zmienić tylko raz na 30 dni"
+
+        else:
+            new_password=generate_new_password()
+            hashed_password= hashowanie_hasla(new_password)
+            #dodanie nowego zahashowanego hasła do bazy danych przy podanym emailu oraz obecnej daty przy ostatniej zmianie hasła
+            update_query= "UPDATE users SET password = %s, last_password_change = %s WHERE email = %s"
+            cursor.execute(update_query,(hashed_password,now,email))
+            db_connection.commit()
+            cursor.close()
+            db_connection.close()
+            return "Hasło zostało zresetowane"
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
