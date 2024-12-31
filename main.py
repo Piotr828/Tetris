@@ -86,6 +86,30 @@ def is_valid_password(password):
         elif char.isdigit():
             has_digit=True
     return has_digit and has_up_ch and has_low_ch
+    
+#sprawdzanie czy login jest dostępny
+def is_login_available(login):
+    try:
+        # łączenie z bazą danych
+        db_connection = mysql.connector.connect(
+            host="srv1628.hstgr.io",
+            user="u335644235_sqlAdmin",
+            password="bZ6sCKAU3E",
+            database="u335644235_tetris",
+            port=3306
+        )
+        cursor = db_connection.cursor()
+        query = "SELECT COUNT(*) FROM users WHERE login = %s"
+        cursor.execute(query,(login,))
+        result=cursor.fetchone()
+        cursor.close()
+        db_connection.close()
+        if result[0]>0: #jeśli jest jakiś wynik inny niż 0 to znaczy że już jest zajęty
+            return False
+        else:
+            return True
+    except mysql.connector.Error:
+        return Exception("Błąd bazy danych.")
 
 def register(login,password,email):
     # sprawdzenie poprawnosci maila
@@ -102,6 +126,9 @@ def register(login,password,email):
     for char in login:
         if not (char.isalnum() or char == "_"):
             return "Login może zawierać tylko litery, cyfry i znak '_'."
+    #sprawdzenie czy login jest dostępny
+        if not is_login_available(login):
+        return "Login jest już zajęty."
     #haszowanie hasla
     if is_valid_password(password):
         hashed_password=hashowanie_hasla(password)
