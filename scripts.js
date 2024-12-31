@@ -53,7 +53,7 @@ const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 let orientation = 0;
 let klocek, row, column, kolor;
-const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4]
+const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4];
 
 
 function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
@@ -119,15 +119,23 @@ function przesunKlocek(kierunek) {
     rysujKlocek(klocek, kolor, column, row);
 }
 klocek_clone = klocek
-async function obrocKlocek(kierunek) {
-    if (row <= -11)
-        return 0;
-    orientation += kierunek;  // Zmieniamy orientation po zakończeniu obrotu
-    // Używamy await, żeby poczekać na wynik funkcji exec_py
-    let nowe = await exec_py('rotate', klocek_clone, kierunek);
-// klocek = nowe;  // Przypisujemy wynik zwrócony przez exec_py do zmiennej klocek
-console.log(nowe)
+// async function obrocKlocek(kierunek) {
+//     if (row <= -11)
+//         return 0;
+//     orientation += kierunek;  // Zmieniamy orientation po zakończeniu obrotu
+//     // Używamy await, żeby poczekać na wynik funkcji exec_py
+//     let nowe = await exec_py('rotate', klocek_clone, kierunek);
+// // klocek = nowe;  // Przypisujemy wynik zwrócony przez exec_py do zmiennej klocek
+// console.log(nowe)
+// }
+
+function obrocKlocek(kierunek) {
+    if (row <= -11) return;
+    orientation = (orientation + kierunek + 4) % 4;
+    klocek = wszystkieKlocki[orientation][`klocek${Object.keys(klocki).indexOf(klocek) + 1}`];
+    rysujKlocek(klocek, kolor, column, row);
 }
+
 
 function wybierzKlocek(pozycja, numerKlocka){
     const wybranySlownik = wszystkieKlocki[pozycja - 1];
