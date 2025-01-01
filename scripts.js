@@ -149,7 +149,6 @@ function nowyKlocek() {
     column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
     kolor = kolory[Math.floor(Math.random()*kolory.length)];
     rysujKlocek(klocek, kolor, column, row);
-    refresh_board(plansza)
 }
 
 
