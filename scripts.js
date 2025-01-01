@@ -143,17 +143,35 @@ function wybierzKlocek(pozycja, numerKlocka){
     return wybranyKlocek;
 }
 
-let klocekDoPlanszy;
-
-function startgame(){
-    let pozycja = 1;
+function nowyKlocek() {
     klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
-    numerKlocka = Math.ceil(Math.random()*7);
-    //klocekDoPlanszy = wybierzKlocek(pozycja, numerKlocka);
     row = 9;
     column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
     kolor = kolory[Math.floor(Math.random()*kolory.length)];
     rysujKlocek(klocek, kolor, column, row);
+}
+
+
+
+function czyKlocekMozeOpadac(plansza, klocek, startRow, startCol) {
+    for (let i = 0; i < klocek.length; i++) {
+        for (let j = 0; j < klocek[i].length; j++) {
+            if (klocek[i][j] === 1) {
+                const newRow = startRow + i + 1;
+                const newCol = startCol + j;
+                if (newRow >= plansza.length || plansza[newRow][newCol] === 1) {
+                    return false; // Nie może opadać
+                }
+            }
+        }
+    }
+    return true; // Może opadać
+}
+
+
+
+function startgame(){
+    nowyKlocek();
 
     document.addEventListener('keydown', function(event) {
         if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
@@ -165,11 +183,14 @@ function startgame(){
     });
 
     intervalId = setInterval(() => {
-        przesunKlocek('drop');
-        if (row < -11){clearInterval(intervalId)}
+        if (czyKlocekMozeOpadac(plansza, klocek, Math.floor(row), column)) {
+            przesunKlocek('drop');
+        } else {
+            dodajKlocekNaPlansze(plansza, klocek, Math.floor(row), column);
+            plansza = usunPelneWiersze(plansza);
+            nowyKlocek();
+        }
     }, 17);
-
-
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
 function putpixel(color,x,y){
