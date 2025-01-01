@@ -178,17 +178,17 @@ const klocki4 = {
     ]
 };
 
-function pozycjaKlocka(nr, strona){
-    if(nr === 4 && strona === prawo){
-        return 1
+function pozycjaKlocka(nr, strona) {
+    if (strona === 'prawo') {
+        if (nr === 4) {
+            return 1; // Jeśli rotacja to 4 i obrót w prawo, wraca na 1
+        }
+        return nr + 1; // Zwiększa rotację
+    } else if (strona === 'lewo') {
+        if (nr === 1) {
+            return 4; // Jeśli rotacja to 1 i obrót w lewo, wraca na 4
+        }
+        return nr - 1; // Zmniejsza rotację
     }
-    else if(nr === 1 && strona === lewo){
-        return 4
-    }
-    else if(strona === prawo){
-        return nr + 1
-    }
-    else if(strona === lewo){
-        return nr - 1
-    }
+    return nr; // Domyślnie zwraca obecną rotację
 }
