@@ -1,0 +1,153 @@
+    /* Tło strony */
+    body {
+        font-family: "My font";
+        background-image: url("../images/Background_anim.gif");
+        background-position: center;
+        background-size: contain;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Kontener dla tabeli */
+    .container {
+        width: 80%;
+        max-width: 600px;
+        background-color: #34495e;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow: hidden; /* Ukrywa ewentualne przewijanie kontenera */
+
+    }
+
+    h1 {
+        color: #ecf0f1;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    /* Tabela */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    /* Nagłówek tabeli */
+    thead {
+        position: sticky;
+        top: 0;
+        background-color: #16a085;
+        color: #fff;
+        z-index: 1;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    th {
+        font-size: 1.2rem;
+    }
+
+    /* Komórki tabeli */
+    td {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+    }
+
+    /* Naprzemienne kolory tła wierszy */
+    tr:nth-child(even) td {
+        background-color: #34495e;
+    }
+
+    /* Efekt hover na wierszach */
+    tr:hover td {
+        background-color: #1abc9c;
+        cursor: pointer;
+    }
+
+    /* Kolor dla numeru rankingu */
+    .rank {
+        font-weight: bold;
+        color: #e67e22;
+    }
+
+    /* Dostosowanie na małych ekranach */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+        th, td {
+            padding: 8px;
+        }
+        table {
+            font-size: 14px;
+        }
+    }
+      #refresh {
+        background-color: #16a085;
+        color: #fff;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    /* Efekt hover na przycisku */
+    #refresh:hover {
+        background-color: #1abc9c;
+        transform: scale(1.05);  /* Powiększenie przycisku przy hover */
+    }
+
+    /* Efekt kliknięcia przycisku */
+    #refresh:active {
+        background-color: #16a085;
+        transform: scale(0.95);  /* Zmniejszenie przycisku przy kliknięciu */
+    }
+
+    /* Dodanie przycisku w odpowiednim miejscu */
+    #refresh {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: block;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+        /* Styl przycisku Back */
+    #back {
+        background-color: #e74c3c;  /* Czerwony */
+        color: #fff;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        margin-top: 20px;
+        display: block;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Efekt hover na przycisku */
+    #back:hover {
+        background-color: #c0392b;
+        transform: scale(1.05);  /* Powiększenie przycisku przy hover */
+    }
+
+    /* Efekt kliknięcia przycisku */
+    #back:active {
+        background-color: #e74c3c;
+        transform: scale(0.95);  /* Zmniejszenie przycisku przy kliknięciu */
+    }

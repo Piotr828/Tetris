@@ -100,7 +100,7 @@ def is_login_available(login):
             port=3306
         )
         cursor = db_connection.cursor()
-        query = "SELECT COUNT(*) FROM users WHERE login = %s"
+        query = "SELECT COUNT(*) FROM users WHERE LOWER(login) = LOWER(%s);"
         cursor.execute(query,(login,))
         result=cursor.fetchone()
         cursor.close()
