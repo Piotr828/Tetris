@@ -53,17 +53,17 @@ const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 let orientation = 0;
 let klocek, row, column, kolor;
-const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4];
+// const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4];
 
 
 function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
     for (let i = 0; i < klocek.length; i++) {
         for (let j = 0; j < klocek[i].length; j++) {
-            if (klocek[i][j] === 1) {
+            if (klocek[i][j]) {
                 const row = startRow + i;
                 const col = startCol + j;
                 if (row >= 0 && row < plansza.length && col >= 0 && col < plansza[0].length) {
-                    plansza[row][col] = 1;
+                    plansza[row+6][col] = kolor;
                 }
             }
         }
@@ -73,6 +73,7 @@ function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie 
 function usunPelneWiersze(plansza) { // usuwa wiersze gdzie sa same 1 i dodaje z 0 na górze
     const noweWiersze = plansza.filter(row => row.includes(0));
     while (noweWiersze.length < plansza.length) {
+        usuniete++;
         noweWiersze.unshift(Array(plansza[0].length).fill(0));
     }
     return noweWiersze;
@@ -102,35 +103,25 @@ function szerokosc(T) {
 function rysujKlocek(klocek, kolor, column, row) {
     const nr = parseInt(Object.values(klocki).indexOf(klocek)) + 1;
     const margin = 5 * column - 15;
-    const height = 5* row + 15;
+    const height = 5* row;
     let deg = (90*orientation)%360 + 'deg'
     document.getElementById("p_cont").innerHTML =
-        `<img style="transform-origin: ${origins[nr]}; ;bottom: ${height}vh; position: relative; left:${margin}vh; transform: rotate(${deg})" 
+        `<img style="transform-origin: ${origins[nr]};bottom: ${height}vh; position: relative; left:${margin}vh; transform: rotate(${deg})" 
         class="klocek_menu" src="images/Tetr${nr}_${kolor}.png">`;
 }
 
 
 function przesunKlocek(kierunek) {
-    if (kierunek === 'left' && column > 0  && row > -11) column--;
-    if (kierunek === 'right' && column < 10 - szerokosc(klocek) && row > -11) column++;
+    if (kierunek === 'left' && column > 0  && row > -12) column--;
+    if (kierunek === 'right' && column < 10 - szerokosc(klocek) && row > -12) column++;
     if (kierunek === 'down' && row > -10) {row--;}
-    else if (kierunek === 'down' && row > -11) {row = -11;}
-    if (kierunek === 'drop' && row > -11) row-= (1+usuniete*0.18)*1/60;
+    else if (kierunek === 'down' && row > -12) {row = -12;}
+    if (kierunek === 'drop' && row > -12) row-= (1+usuniete*0.18)*1/60;
     rysujKlocek(klocek, kolor, column, row);
 }
-klocek_clone = klocek
-// async function obrocKlocek(kierunek) {
-//     if (row <= -11)
-//         return 0;
-//     orientation += kierunek;  // Zmieniamy orientation po zakończeniu obrotu
-//     // Używamy await, żeby poczekać na wynik funkcji exec_py
-//     let nowe = await exec_py('rotate', klocek_clone, kierunek);
-// // klocek = nowe;  // Przypisujemy wynik zwrócony przez exec_py do zmiennej klocek
-// console.log(nowe)
-// }
 
 function obrocKlocek(kierunek) {
-    if (row <= -11) return;
+    if (row <= -12) return;
     orientation = (orientation + kierunek + 4) % 4;
     klocek = wszystkieKlocki[orientation][`klocek${Object.keys(klocki).indexOf(klocek) + 1}`];
     rysujKlocek(klocek, kolor, column, row);
@@ -153,10 +144,12 @@ function nowyKlocek() {
 
 
 
-function czyKlocekMozeOpadac(plansza, klocek, startRow, startCol) {
+function czyKlocekMozeOpadac(plansza, klocek, startRow, startCol) { return row > -12
+    startRow += 12
+    alert(row)
     for (let i = 0; i < klocek.length; i++) {
         for (let j = 0; j < klocek[i].length; j++) {
-            if (klocek[i][j] === 1) {
+            if (klocek[i][j]) {
                 const newRow = startRow + i + 1;
                 const newCol = startCol + j;
                 if (newRow >= plansza.length || plansza[newRow][newCol] === 1) {
@@ -165,7 +158,6 @@ function czyKlocekMozeOpadac(plansza, klocek, startRow, startCol) {
             }
         }
     }
-    return true; // Może opadać
 }
 
 
@@ -183,22 +175,24 @@ function startgame(){
     });
 
     intervalId = setInterval(() => {
-        if (czyKlocekMozeOpadac(plansza, klocek, Math.floor(row), column)) {
+        if (czyKlocekMozeOpadac(plansza, klocek, Math.floor(row+22), column)) {
             przesunKlocek('drop');
         } else {
-            dodajKlocekNaPlansze(plansza, klocek, Math.floor(row), column);
+            dodajKlocekNaPlansze(plansza, klocek, Math.floor(row+22), column);
             plansza = usunPelneWiersze(plansza);
+            refresh_board(plansza)
             nowyKlocek();
         }
     }, 17);
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
 function putpixel(color,x,y){
-    document.getElementById("main_js").innerHTML += `<img src="images/square_${color}.png" style="width: 5vh; left: calc(${(x-6)*5}vh + 50vw); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
+    document.getElementById("klocki").innerHTML += `<img src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
 }
 
 
 function refresh_board(board) {
+    document.getElementById("klocki").innerHTML = ''
     for (let y = 0; y < board.length; y++) {
         for (let x = 0; x < board[y].length; x++) {
             if (board[y][x]) { // Sprawdzenie, czy pole nie jest puste
@@ -206,12 +200,4 @@ function refresh_board(board) {
             }
         }
     }
-}
-
-function newturn(){
-//     Nowa tura:
-//     Dodawanie klocka do planszy
-//     usuwanie pełnych wierszy
-//     refresh_board
-//     Ponowne upadanie nowego klocka
 }

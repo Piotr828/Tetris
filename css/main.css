@@ -2,7 +2,7 @@
   font-family: 'MyFont';
   src: url('css/Tetris.otf') format('truetype');
 }
-
+.border{}
 .main{
     display: flex;
     height: 100vh;
