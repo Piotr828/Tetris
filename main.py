@@ -5,6 +5,7 @@ import mysql.connector
 import string
 import random
 import datetime
+from dotenv import load_dotenv
 def close():
     os._exit(0)
 
@@ -46,6 +47,27 @@ def apply_piece_to_board(board, piece, column):
         new_board[lowest_row + row_piece][column + col_piece] = color
 
     return new_board
+
+load_dotenv()
+
+db_host = os.getenv("DB_HOST")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASS")
+db_name = os.getenv("DB_NAME")
+
+
+def connect_to_database():
+    try:
+        db_connection = mysql.connector.connect(
+            host=db_host,
+            user=db_user,
+            password=db_password,
+            database=db_name,
+            port=3306
+        )
+        return db_connection
+    except mysql.connector.Error:
+        return Exception("Błąd bazy danych.")
 
 def hashowanie_hasla(password):
     #haszuje hasło przy użyciu algorytmu SHA-256.
@@ -92,13 +114,7 @@ def is_valid_password(password):
 def is_login_available(login):
     try:
         # łączenie z bazą danych
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
         query = "SELECT COUNT(*) FROM users WHERE LOWER(login) = LOWER(%s);"
         cursor.execute(query,(login,))
@@ -137,14 +153,7 @@ def register(login,password,email):
         return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz jedną cyfrę"
 
     try:
-        #łączenie z bazą danych
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
 
         #zapisywanie danych użytkownika podanych przy rejestracji w bazie danych
@@ -168,13 +177,7 @@ def log(login,password):
     
     try:
         #łączenie z bazą danych
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
         query = "SELECT password FROM users WHERE login = %s" #pobranie hasła przypisanego do podanego loginu
         cursor.execute(query,(login,))
@@ -197,13 +200,7 @@ def log(login,password):
         
 def save(login,xp):
     try:
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
         #sprawdzenie czy użytkownik o tej nazwie istnieje w bazie danych
         cursor.execute("SELECT COUNT(*) FROM users WHERE login = %s", (login,))
@@ -225,13 +222,7 @@ def save(login,xp):
 #pobranie xp użytkownika z bazy
 def loadxp(login):
     try:
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
         cursor.execute("SELECT xp FROM users WHERE login = %s",(login,)) #pobranie xp
         result=cursor.fetchone()
@@ -251,13 +242,7 @@ def loadxp(login):
 #zwracanie loginow użytkownikow wraz z xp posortowanych malejąco według xp
 def leaderboard():
     try:
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
         cursor.execute("SELECT login, xp FROM users ORDER BY xp DESC")
         result=cursor.fetchall()
@@ -285,13 +270,7 @@ def generate_new_password(length=5): #na wstępie ustalamy długość 5 aby był
 
 def reset_password(email):
     try:
-        db_connection = mysql.connector.connect(
-            host="srv1628.hstgr.io",
-            user="u335644235_sqlAdmin",
-            password="bZ6sCKAU3E",
-            database="u335644235_tetris",
-            port=3306
-        )
+        db_connection = connect_to_database()
         cursor = db_connection.cursor()
         #sprawdzenie czy email jest w bazie danych
         query = "SELECT last_password_change FROM users WHERE email = %s"
