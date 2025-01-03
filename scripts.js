@@ -137,7 +137,7 @@ function wybierzKlocek(pozycja, numerKlocka){
 function nowyKlocek() {
     klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
     row = 9;
-    column = Math.floor(Math.floor(Math.random()*(10-szerokosc(klocek))) );
+    column = Math.floor(Math.floor(Math.random()*(11-szerokosc(klocek))) );
     kolor = kolory[Math.floor(Math.random()*kolory.length)];
     rysujKlocek(klocek, kolor, column, row);
 }
@@ -146,13 +146,12 @@ function nowyKlocek() {
 
 function czyKlocekMozeOpadac(plansza, klocek, startRow, startCol) { return row > -12
     startRow += 12
-    alert(row)
     for (let i = 0; i < klocek.length; i++) {
         for (let j = 0; j < klocek[i].length; j++) {
             if (klocek[i][j]) {
                 const newRow = startRow + i + 1;
                 const newCol = startCol + j;
-                if (newRow >= plansza.length || plansza[newRow][newCol] === 1) {
+                if (newRow >= plansza.length || plansza[newRow][newCol]) {
                     return false; // Nie może opadać
                 }
             }

@@ -156,7 +156,7 @@ def register(login,password,email):
         # zamknięcie połączenia
         cursor.close()
         db_connection.close()
-        return "Użytkownik zarejestrowany pomyślnie."
+        return 0
 
     except mysql.connector.Error:
         return Exception("Błąd bazy danych.")
