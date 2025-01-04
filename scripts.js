@@ -54,79 +54,116 @@ let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 let orientation = 0;
 let klocek, row, column, kolor;
 // const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4];
+let aktualnyKlocek = null;
+let intervalId = null;
 
+function dodajKlocekNaPlansze() {
+    const { dane, pozycja, kolor } = aktualnyKlocek;
+    const [startRow, startCol] = pozycja;
 
-function dodajKlocekNaPlansze(plansza, klocek, startRow, startCol) { // dodanie klocka na plansze, gdzie zaczyna sie jego pozycja na startRow i startCol
-    for (let i = 0; i < klocek.length; i++) {
-        for (let j = 0; j < klocek[i].length; j++) {
-            if (klocek[i][j]) {
+    for (let i = 0; i < dane.length; i++) {
+        for (let j = 0; j < dane[i].length; j++) {
+            if (dane[i][j]) {
                 const row = startRow + i;
                 const col = startCol + j;
-                if (row >= 0 && row < plansza.length && col >= 0 && col < plansza[0].length) {
-                    plansza[row+6][col] = kolor;
+                if (row >= 0 && row < rows && col >= 0 && col < columns) {
+                    plansza[row][col] = kolor; // Ustaw kolor na planszy
                 }
             }
         }
     }
 }
 
-function usunPelneWiersze(plansza) { // usuwa wiersze gdzie sa same 1 i dodaje z 0 na górze
-    const noweWiersze = plansza.filter(row => row.includes(0));
-    while (noweWiersze.length < plansza.length) {
-        usuniete++;
-        noweWiersze.unshift(Array(plansza[0].length).fill(0));
-    }
-    return noweWiersze;
-}
+function usunPelneWiersze() {
+    const nowePlansza = plansza.filter(row => row.includes(0));
+    const liczbaUsunietych = plansza.length - nowePlansza.length;
 
-function szerokosc(T) {
-    let left = T[0].length;  // Inicjalizujemy lewe ograniczenie jako liczbę kolumn
-    let right = -1;  // Inicjalizujemy prawe ograniczenie jako -1
-
-    // Przechodzimy przez całą tablicę i szukamy pierwszej i ostatniej kolumny z danymi
-    for (let i = 0; i < T.length; i++) {
-        for (let j = 0; j < T[i].length; j++) {
-        if (T[i][j] !== null && T[i][j] !== undefined && T[i][j] !== ''&& T[i][j] !== 0) {
-            left = Math.min(left, j); // Pierwsza kolumna z danymi
-            right = Math.max(right, j); // Ostatnia kolumna z danymi
-        }
-        }
+    for (let i = 0; i < liczbaUsunietych; i++) {
+        nowePlansza.unshift(Array(columns).fill(0));
     }
 
-    // Jeśli nie znaleziono żadnych danych, zwracamy 0
-    if (right === -1) return 0;
-
-    // Liczymy liczbę kolumn między pierwszą a ostatnią kolumną z danymi
-    return right - left + 1;
+    usuniete += liczbaUsunietych;
+    plansza = nowePlansza;
 }
 
-function rysujKlocek(klocek, kolor, column, row) {
-    const nr = parseInt(Object.values(klocki).indexOf(klocek)) + 1;
-    const margin = 5 * column - 15;
-    const height = 5* row;
-    let deg = (90*orientation)%360 + 'deg'
-    document.getElementById("p_cont").innerHTML =
-        `<img style="transform-origin: ${origins[nr]};bottom: ${height}vh; position: relative; left:${margin}vh; transform: rotate(${deg})" 
-        class="klocek_menu" src="images/Tetr${nr}_${kolor}.png">`;
+function rysujPlansze() {
+    document.getElementById("klocki").innerHTML = '';
+
+    // Rysowanie planszy
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < columns; j++) {
+            if (plansza[i][j]) {
+                putpixel(plansza[i][j], j, rows - i); // Przekształć współrzędne na piksele
+            }
+        }
+    }
+
+    // Rysowanie aktualnie spadającego klocka
+    const { dane, pozycja, kolor } = aktualnyKlocek;
+    const [startRow, startCol] = pozycja;
+
+    for (let i = 0; i < dane.length; i++) {
+        for (let j = 0; j < dane[i].length; j++) {
+            if (dane[i][j]) {
+                const row = startRow + i;
+                const col = startCol + j;
+
+                // Rysuj klocek tylko, jeśli mieści się w planszy
+                if (row >= 0 && row < rows && col >= 0 && col < columns) {
+                    putpixel(kolor, col, rows - row); // Przekształć współrzędne na piksele
+                }
+            }
+        }
+    }
+}
+
+
+function czyKolizja(dane, [startRow, startCol]) {
+    for (let i = 0; i < dane.length; i++) {
+        for (let j = 0; j < dane[i].length; j++) {
+            if (dane[i][j]) {
+                const row = startRow + i;
+                const col = startCol + j;
+
+                if (row >= rows || col < 0 || col >= columns || (row >= 0 && plansza[row][col])) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 
 function przesunKlocek(kierunek) {
-    if (kierunek === 'left' && column > 0  && row > -12) column--;
-    if (kierunek === 'right' && column < 10 - szerokosc(klocek) && row > -12) column++;
-    if (kierunek === 'down' && row > -10) {row--;}
-    else if (kierunek === 'down' && row > -12) {row = -12;}
-    if (kierunek === 'drop' && row > -12) row-= (1+usuniete*0.18)*1/60;
-    rysujKlocek(klocek, kolor, column, row);
+    const { dane, pozycja } = aktualnyKlocek;
+    let [startRow, startCol] = pozycja;
+
+    if (kierunek === 'down') startRow++;
+    else if (kierunek === 'left') startCol--;
+    else if (kierunek === 'right') startCol++;
+
+    if (!czyKolizja(dane, [startRow, startCol])) {
+        aktualnyKlocek.pozycja = [startRow, startCol];
+    } else if (kierunek === 'down') {
+        dodajKlocekNaPlansze();
+        usunPelneWiersze();
+        nowyKlocek();
+        if (czyKolizja(aktualnyKlocek.dane, aktualnyKlocek.pozycja)) {
+            clearInterval(intervalId);
+            alert("Game Over!");
+        }
+    }
 }
 
-function obrocKlocek(kierunek) {
-    if (row <= -12) return;
-    orientation = (orientation + kierunek + 4) % 4;
-    klocek = wszystkieKlocki[orientation][`klocek${Object.keys(klocki).indexOf(klocek) + 1}`];
-    rysujKlocek(klocek, kolor, column, row);
-}
+function obrocKlocek() {
+    const { dane, pozycja } = aktualnyKlocek;
+    const nowaDane = dane[0].map((_, colIndex) => dane.map(row => row[colIndex]).reverse());
 
+    if (!czyKolizja(nowaDane, pozycja)) {
+        aktualnyKlocek.dane = nowaDane;
+    }
+}
 
 function wybierzKlocek(pozycja, numerKlocka){
     const wybranySlownik = wszystkieKlocki[pozycja - 1];
@@ -134,55 +171,32 @@ function wybierzKlocek(pozycja, numerKlocka){
     return wybranyKlocek;
 }
 
+
 function nowyKlocek() {
-    klocek = klocki['klocek'+Math.ceil(Math.random()*7)];
-    row = 9;
-    column = Math.floor(Math.floor(Math.random()*(11-szerokosc(klocek))) );
-    kolor = kolory[Math.floor(Math.random()*kolory.length)];
-    rysujKlocek(klocek, kolor, column, row);
+    const typKlocka = Math.ceil(Math.random() * 7);
+    aktualnyKlocek = {
+        dane: klocki[`klocek${typKlocka}`],
+        pozycja: [0, Math.floor(columns / 2) - 2], // Startowa pozycja w górnym środku planszy
+        kolor: kolory[typKlocka - 1]
+    };
 }
-
-
-
-function czyKlocekMozeOpadac(plansza, klocek, startRow, startCol) { return row > -12
-    startRow += 12
-    for (let i = 0; i < klocek.length; i++) {
-        for (let j = 0; j < klocek[i].length; j++) {
-            if (klocek[i][j]) {
-                const newRow = startRow + i + 1;
-                const newCol = startCol + j;
-                if (newRow >= plansza.length || plansza[newRow][newCol]) {
-                    return false; // Nie może opadać
-                }
-            }
-        }
-    }
-}
-
-
 
 function startgame(){
+
     nowyKlocek();
+    intervalId = setInterval(() => {
+        przesunKlocek('down');
+        rysujPlansze();
+    }, 500);
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
-        else if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
-        else if (event.key === 'ArrowDown' || event.key === 's' || event.key === ' ') przesunKlocek('down');
-        else if (event.key === 'e' || event.key === '.' ) obrocKlocek(1);
-        else if (event.key === 'q' || event.key === ',') obrocKlocek(-1);
-
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') przesunKlocek('left');
+        else if (event.key === 'ArrowRight') przesunKlocek('right');
+        else if (event.key === 'ArrowDown') przesunKlocek('down');
+        else if (event.key === ' ') obrocKlocek();
+        rysujPlansze();
     });
 
-    intervalId = setInterval(() => {
-        if (czyKlocekMozeOpadac(plansza, klocek, Math.floor(row+22), column)) {
-            przesunKlocek('drop');
-        } else {
-            dodajKlocekNaPlansze(plansza, klocek, Math.floor(row+22), column);
-            plansza = usunPelneWiersze(plansza);
-            refresh_board(plansza)
-            nowyKlocek();
-        }
-    }, 17);
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
 function putpixel(color,x,y){
