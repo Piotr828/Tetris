@@ -176,7 +176,7 @@ function nowyKlocek() {
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
-        pozycja: [0, Math.floor(columns / 2) - 2], // Startowa pozycja w górnym środku planszy
+        pozycja: [-4, Math.floor(columns / 2) - 2], // Startowa pozycja w górnym środku planszy
         kolor: kolory[typKlocka - 1]
     };
 }
