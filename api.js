@@ -14,3 +14,21 @@ window.addEventListener('resize', function() {
         }
     if(window.innerWidth < window.innerHeight) console.error("Granie w trybie pionowym jest niezalecane")
 });
+// Funkcja do zapisywania danych do localStorage
+function saveSessionData(key, value) {
+    // Przechowuje dane jako JSON w localStorage
+    let sessionData = localStorage.getItem('sessionData'); // Pobiera obecne dane (jeśli istnieją)
+    sessionData = sessionData ? JSON.parse(sessionData) : {}; // Jeśli są, to parsujemy do obiektu, jeśli nie, to tworzymy pusty obiekt
+    sessionData[key] = value; // Zapisujemy nową wartość
+    localStorage.setItem('sessionData', JSON.stringify(sessionData)); // Zapisujemy zmodyfikowany obiekt
+}
+
+function getSessionData(key) {
+    let sessionData = localStorage.getItem('sessionData'); // Pobiera dane z localStorage
+    if (sessionData) {
+        sessionData = JSON.parse(sessionData); // Parsujemy dane do obiektu
+        return sessionData[key]; // Zwracamy wartość dla podanego klucza
+    }
+    return null; // Zwracamy null, jeśli dane nie istnieją
+}
+if(getSessionData('login')){alert(getSessionData('login'))}

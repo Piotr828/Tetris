@@ -1,4 +1,3 @@
-import webview
 import os
 import hashlib
 import mysql.connector
@@ -49,11 +48,19 @@ def apply_piece_to_board(board, piece, column):
     return new_board
 
 load_dotenv()
+from dotenv import load_dotenv
+import os
 
-db_host = os.getenv("DB_HOST")
-db_user = os.getenv("DB_USER")
-db_password = os.getenv("DB_PASS")
-db_name = os.getenv("DB_NAME")
+# Załaduj zmienne środowiskowe z pliku .env (jeśli istnieje)
+load_dotenv()
+
+# Pobierz zmienne środowiskowe
+db_host = 'srv1628.hstgr.io'
+db_user = 'u335644235_sqlAdmin'
+db_password = 'bZ6sCKAU3E'
+db_name = 'u335644235_tetris'
+
+# Sprawdź, czy wszystkie zmienne zostały poprawnie załadowane
 
 
 def connect_to_database():
@@ -191,7 +198,7 @@ def log(login,password):
         db_connection.close()
         #porównanie pobranego hasła z bazy z podanym przy logowaniu
         if hashed_password==saved_password:
-            return "Zalogowano."
+            return 0
         else:
             return "Nieprawidłowe hasło."
 

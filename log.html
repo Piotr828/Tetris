@@ -17,24 +17,24 @@
             <h1>Logowanie</h1>
             <div class="input-box">
                 
-                <input type="text" placeholder="Email/Nickname" required>
+                <input id="nickmail" type="text" placeholder="Login" required>
                 <i class='bx bxs-user'></i>
             </div>
             <div class="input-box">
                 
-                <input type="password" placeholder="Hasło" required>
+                <input id="pass" type="password" placeholder="Hasło" required>
                 <i class='bx bxs-lock-alt'></i>
             </div>
             <div class="remember-forgot">
                 <label>
                     <input type="checkbox"> Zapamiętaj mnie
                 </label>
-                <a href="#">Zapomniałeś hasła?</a>
+                <a href="reg.html">Zapomniałeś hasła?</a>
 
             </div>
-            <button type="submit" class="btn">Zaloguj</button>
+            <button type="submit" class="btn" onclick="zaloguj(document.getElementById('nickmail').value,document.getElementById('pass').value)">Zaloguj</button>
             <div class="register-link">
-                <p>Nie masz konta? <a href="#">Zarejestruj!</a>
+                <p>Nie masz konta? <a href="reg.html">Zarejestruj!</a>
             </div>
         </form>
     </div>
