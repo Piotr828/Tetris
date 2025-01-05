@@ -187,7 +187,7 @@ function startgame(){
     intervalId = setInterval(() => {
         przesunKlocek('down');
         rysujPlansze();
-    }, 500);
+    }, 500/(1+usuniete*0.2));
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') przesunKlocek('left');
