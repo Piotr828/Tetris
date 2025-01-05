@@ -14,6 +14,12 @@ window.addEventListener('resize', function() {
         }
     if(window.innerWidth < window.innerHeight) console.error("Granie w trybie pionowym jest niezalecane")
 });
+window.addEventListener('keydown', function(event) {
+  if (event.key === 'Backspace') {
+    event.preventDefault(); // Zapobiega domyślnemu działaniu wstecz
+    window.location.href = 'index.html'; // Przenosi do index.html
+  }
+});
 // Funkcja do zapisywania danych do localStorage
 function saveSessionData(key, value) {
     // Przechowuje dane jako JSON w localStorage
@@ -31,4 +37,3 @@ function getSessionData(key) {
     }
     return null; // Zwracamy null, jeśli dane nie istnieją
 }
-if(getSessionData('login')){alert(getSessionData('login'))}

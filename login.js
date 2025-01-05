@@ -1,4 +1,3 @@
-saveSessionData(key, value)
 function zaloguj(login,password){
 
         exec_py('log', login, password).then(result => {

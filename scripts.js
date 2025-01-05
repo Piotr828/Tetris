@@ -204,13 +204,11 @@ function putpixel(color,x,y){
 }
 
 
-function refresh_board(board) {
-    document.getElementById("klocki").innerHTML = ''
-    for (let y = 0; y < board.length; y++) {
-        for (let x = 0; x < board[y].length; x++) {
-            if (board[y][x]) { // Sprawdzenie, czy pole nie jest puste
-                putpixel(board[y][x], x, 20 - y); // Przeliczenie współrzędnych
-            }
-        }
+function dodajXP(XP){
+    if (getSessionData('login')){
+    exec_py('dodajXP', getSessionData('login'), XP).then(result => { console.log(result); });
+
     }
 }
+//Sztuczne logowanie
+saveSessionData('login','Piotr')

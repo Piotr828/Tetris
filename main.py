@@ -191,7 +191,7 @@ def log(login,password):
         result=cursor.fetchone()
         #nieprawidłowy login
         if result is None:
-            return "Nie znaleziono nazwy użytkownika."
+            return "Nieprawidłowe dane logowania."
         saved_password=result[0]
         #zamkniecie połączenia
         cursor.close()
@@ -200,7 +200,7 @@ def log(login,password):
         if hashed_password==saved_password:
             return 0
         else:
-            return "Nieprawidłowe hasło."
+            return "Nieprawidłowe dane logowania."
 
     except mysql.connector.Error:
         return "Błąd bazy danych."
@@ -303,3 +303,7 @@ def reset_password(email):
             return "Hasło zostało zresetowane"
     except mysql.connector.Error:
         return "Błąd bazy danych"
+def dodajXP(login, XP):
+    obecne = loadxp(login)
+    obecne += XP
+    save(login,obecne)

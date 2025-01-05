@@ -8,7 +8,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="log.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+<script src="api.js"></script>
 </head>
 
 <body>
@@ -24,19 +24,22 @@
                 
                 <input id="pass" type="password" placeholder="Hasło" required>
                 <i class='bx bxs-lock-alt'></i>
-            </div>
-            <div class="remember-forgot">
-                <label>
-                    <input type="checkbox"> Zapamiętaj mnie
-                </label>
-                <a href="reg.html">Zapomniałeś hasła?</a>
+                            <span style="color: red; padding: 10px" id="err"></span><br>
 
             </div>
-            <button type="submit" class="btn" onclick="zaloguj(document.getElementById('nickmail').value,document.getElementById('pass').value)">Zaloguj</button>
+            <div class="remember-forgot">
+
+                <label style="margin-top: 12px">
+                    <input type="checkbox"> Zapamiętaj mnie
+                </label>
+                <a href="reg.html" style="margin-top: 12px">Zapomniałeś hasła?</a>
+
+            </div>
+            <button type="button" class="btn" onclick="zaloguj(document.getElementById('nickmail').value,document.getElementById('pass').value)">Zaloguj</button>
             <div class="register-link">
                 <p>Nie masz konta? <a href="reg.html">Zarejestruj!</a>
             </div>
         </form>
     </div>
-
+<script src="login.js"></script>
 </body>
