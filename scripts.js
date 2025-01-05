@@ -203,19 +203,6 @@ function putpixel(color,x,y){
     document.getElementById("klocki").innerHTML += `<img src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
 }
 
-
-<<<<<<< HEAD
-// function refresh_board(board) {
-//     document.getElementById("klocki").innerHTML = ''
-//     for (let y = 0; y < board.length; y++) {
-//         for (let x = 0; x < board[y].length; x++) {
-//             if (board[y][x]) { // Sprawdzenie, czy pole nie jest puste
-//                 putpixel(board[y][x], x, 20 - y); // Przeliczenie współrzędnych
-//             }
-//         }
-//     }
-// }
-=======
 function dodajXP(XP){
     if (getSessionData('login')){
     exec_py('dodajXP', getSessionData('login'), XP).then(result => { console.log(result); });
@@ -224,4 +211,3 @@ function dodajXP(XP){
 }
 //Sztuczne logowanie
 saveSessionData('login','Piotr')
->>>>>>> 90dff702b9e746269905136eb37a54f6f053bdbc
