@@ -16,6 +16,7 @@ body {
     background: url('jpg.webp') no-repeat;
     background-size: cover;
     background-position: center;
+    background-color: darkmagenta;
 }
 
 .wrapper {

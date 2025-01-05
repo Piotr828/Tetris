@@ -187,7 +187,7 @@ function startgame(){
     intervalId = setInterval(() => {
         przesunKlocek('down');
         rysujPlansze();
-    }, 500);
+    }, 500/(1+usuniete*0.2));
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') przesunKlocek('left');
@@ -204,6 +204,7 @@ function putpixel(color,x,y){
 }
 
 
+<<<<<<< HEAD
 // function refresh_board(board) {
 //     document.getElementById("klocki").innerHTML = ''
 //     for (let y = 0; y < board.length; y++) {
@@ -214,3 +215,13 @@ function putpixel(color,x,y){
 //         }
 //     }
 // }
+=======
+function dodajXP(XP){
+    if (getSessionData('login')){
+    exec_py('dodajXP', getSessionData('login'), XP).then(result => { console.log(result); });
+
+    }
+}
+//Sztuczne logowanie
+saveSessionData('login','Piotr')
+>>>>>>> 90dff702b9e746269905136eb37a54f6f053bdbc

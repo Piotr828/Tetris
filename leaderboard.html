@@ -6,7 +6,7 @@
     <title>RANKING</title>
     <link rel="stylesheet" href="css/rankstyle.css">
     <script src="api.js"></script>
-    <script src="lb.js"></script>
+
 </head>
 
 <body>
@@ -25,10 +25,11 @@
             </tbody>
         </table>
     </div>
-<button id="refresh" onclick="pokaz()">Odśwież</button>
+<button id="refresh" onclick="pokaz(getSessionData('login'))">Odśwież</button>
 <button id="back" onclick="window.location='index.html'">MENU</button>
     </center>
 <br>
+<script src="lb.js"></script>
 </body>
 </html>
 
