@@ -51,9 +51,9 @@ const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
 const rows = 20;
 const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
-let orientation = 0;
+// let orientation = 0;
 let klocek, row, column, kolor;
-// const wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4];
+// wszystkieKlocki = [klocki1, klocki2, klocki3, klocki4];
 let aktualnyKlocek = null;
 let intervalId = null;
 
@@ -165,11 +165,11 @@ function obrocKlocek() {
     }
 }
 
-function wybierzKlocek(pozycja, numerKlocka){
-    const wybranySlownik = wszystkieKlocki[pozycja - 1];
-    const wybranyKlocek = wybranySlownik[`klocek${numerKlocka}`];
-    return wybranyKlocek;
-}
+// function wybierzKlocek(pozycja, numerKlocka){
+//     const wybranySlownik = wszystkieKlocki[pozycja - 1];
+//     const wybranyKlocek = wybranySlownik[`klocek${numerKlocka}`];
+//     return wybranyKlocek;
+// }
 
 
 function nowyKlocek() {
@@ -204,13 +204,13 @@ function putpixel(color,x,y){
 }
 
 
-function refresh_board(board) {
-    document.getElementById("klocki").innerHTML = ''
-    for (let y = 0; y < board.length; y++) {
-        for (let x = 0; x < board[y].length; x++) {
-            if (board[y][x]) { // Sprawdzenie, czy pole nie jest puste
-                putpixel(board[y][x], x, 20 - y); // Przeliczenie współrzędnych
-            }
-        }
-    }
-}
+// function refresh_board(board) {
+//     document.getElementById("klocki").innerHTML = ''
+//     for (let y = 0; y < board.length; y++) {
+//         for (let x = 0; x < board[y].length; x++) {
+//             if (board[y][x]) { // Sprawdzenie, czy pole nie jest puste
+//                 putpixel(board[y][x], x, 20 - y); // Przeliczenie współrzędnych
+//             }
+//         }
+//     }
+// }
