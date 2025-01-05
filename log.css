@@ -13,7 +13,7 @@ body {
     justify-content: center;
     align-items:center;
     min-height:100vh;
-    background: url('jpg.webp') no-repeat;
+    background: url('../images/log_background.png') no-repeat;
     background-size: cover;
     background-position: center;
     background-color: darkmagenta;
