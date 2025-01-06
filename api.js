@@ -1,5 +1,4 @@
 function exec_py(functionName, ...args) {return window.pywebview.api.call_function(functionName, args).then(response => {return response;});}
-let lastReloadTime = 0; // Zmienna przechowująca czas ostatniego wywołania funkcji
 function reloadCSS() {
     if (document.getElementById('toreload')) { // Sprawdzamy, czy minęło 8 sekund
         document.getElementById('toreload').href = document.getElementById('toreload').href + "?v="+currentTime
@@ -34,8 +33,13 @@ window.addEventListener('resize', function() {
         }
 });
 window.addEventListener('keydown', function(event) {
-  if (event.key === 'Backspace') {
-    event.preventDefault(); // Zapobiega domyślnemu działaniu wstecz
+  // Sprawdź, czy zdarzenie nie pochodzi z pola tekstowego
+  const activeElement = document.activeElement;
+  const isEditable = activeElement.tagName === 'INPUT' ||
+                     activeElement.tagName === 'TEXTAREA' ||
+                     activeElement.isContentEditable;
+
+  if (!isEditable && event.key === 'Backspace') {
     window.location.href = 'index.html'; // Przenosi do index.html
   }
 });

@@ -145,14 +145,11 @@ function przesunKlocek(kierunek) {
 
     if (!czyKolizja(dane, [startRow, startCol])) {
         aktualnyKlocek.pozycja = [startRow, startCol]; // jesli nie ma kolizji zmienia jego pozycje
-    } else if (kierunek === 'down') { // jesli jest kolizja przy ruchu w dol
+    } else if (kierunek === 'down') { // jesli jest kolizja przy ruchu w dół
         dodajKlocekNaPlansze(); // dodaje go na plansze
         usunPelneWiersze(); // usuwa pelne wiersze
         nowyKlocek(); // generuje nowy klocekl
-        if (czyKolizja(aktualnyKlocek.dane, aktualnyKlocek.pozycja)) { // jezeli ma kolizje na poczatku planszy, czyli jak przgrywamy
-            clearInterval(intervalId); // to konczy gre
-            alert("Game Over!");
-        }
+
     }
 }
 
@@ -168,6 +165,11 @@ function obrocKlocek() {
 
 // wybiera losowy klocek i ustawia go na górze
 function nowyKlocek() {
+          if (plansza[0].some(function(x){return !!x})) { // jezeli ma kolizje na poczatku planszy, czyli jak przgrywamy
+            clearInterval(intervalId); // to konczy gre
+            game_over();
+            //window.location = 'index.html'
+        }
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
@@ -206,3 +208,101 @@ function dodajXP(XP){
 }
 //Sztuczne logowanie
 saveSessionData('login','Piotr')
+function game_over(){
+
+let x = `
+    <!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylowe Alerty</title>
+    <style>
+        
+        .alert {
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px auto;
+            max-width: 400px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .summary-alert {
+            background: linear-gradient(135deg, #e0f7fa, #d4f1f4);
+            color: #004d40;
+            border: 2px solid #80deea;
+            text-align: left;
+            padding: 20px;
+        }
+
+        .summary-alert span {
+            display: block;
+            margin: 10px 0;
+            font-size: 0.95em;
+            color: #006064;
+        }
+
+        .summary-alert .summary-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #004d40;
+        }
+
+        .summary-alert .buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .summary-alert button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            border: none;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .summary-alert button:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-button {
+            background-color: #ff7043;
+            color: white;
+        }
+
+        .menu-button:hover {
+            background-color: #e64a19;
+        }
+
+        .play-button {
+            background-color: #66bb6a;
+            color: white;
+        }
+
+        .play-button:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="alert summary-alert">
+        <center><div class="summary-title">Koniec gry!</div></center>
+        <span><strong>Usunięte wiersze:</strong> ${usuniete}</span>
+        <span><strong>Punkty:</strong> ${Math.round(usuniete*11.415926)} </span>
+        <div class="buttons">
+            <button class="menu-button" onclick="window.location='index.html'">Powrót do menu</button>
+            <button class="play-button" onclick="window.location.reload();">Zagraj ponownie</button>
+        </div>
+    </div>
+`
+
+    document.body.innerHTML = x
+}
