@@ -27,3 +27,74 @@ header{
     color: #fff;
 text-shadow: 1px 1px 0px #cccccc, 0px 0px 3px rgba(255, 255, 255, 0.6);
 }
+.alert {
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px auto;
+            max-width: 400px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .summary-alert {
+            background: linear-gradient(135deg, #e0f7fa, #d4f1f4);
+            color: #004d40;
+            border: 2px solid #80deea;
+            text-align: left;
+            padding: 20px;
+        }
+
+        .summary-alert span {
+            display: block;
+            margin: 10px 0;
+            font-size: 0.95em;
+            color: #006064;
+        }
+
+        .summary-alert .summary-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #004d40;
+        }
+
+        .summary-alert .buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .summary-alert button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            border: none;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .summary-alert button:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-button {
+            background-color: #ff7043;
+            color: white;
+        }
+
+        .menu-button:hover {
+            background-color: #e64a19;
+        }
+
+        .play-button {
+            background-color: #66bb6a;
+            color: white;
+        }
+
+        .play-button:hover {
+            background-color: #388e3c;
+        }

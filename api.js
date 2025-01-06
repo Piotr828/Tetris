@@ -5,6 +5,46 @@ function reloadCSS() {
     }
 }
 window.addEventListener('resize', () => {
+
+    const alert = `
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .alert {
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px auto;
+            max-width: 400px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .error-alert {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 2px solid #ef9a9a;
+        }
+
+      
+    </style>
+<body>
+    <div class="alert error-alert">Błąd: Wysokość okna nie może być większa niż 2x jego szerokość.</div>
+    `
+
+
+
   const html = document.documentElement;
 
   // Pobranie aktualnej szerokości i wysokości okna
@@ -21,6 +61,15 @@ window.addEventListener('resize', () => {
           document.getElementById('main_js').style.display = 'block';
 
   }
+
+
+
+
+
+
+
+
+
 });
 
 // Wywołanie event listenera na start (aby sprawdzić aktualny stan okna)
