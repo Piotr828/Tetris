@@ -220,19 +220,7 @@ function dodajXP(XP){
 //Sztuczne logowanie
 saveSessionData('login','Piotr')
 function game_over(){
-    let punkty = 0;
-    if (usuniete == 1) {
-        punkty+=15;
-    } else if (usuniete == 2) {
-        punkty += 30;
-    } else if (usuniete ==3) {
-        punkty += 45;
-    } else if (usuniete == 4) {
-        punkty += 60;
-    } else (usuniete == 5) {
-        punkty += 75
-    }
-
+    let punkty = usuniete*usuniete*usuniete;
 </head>
 <body>
     <div class="alert summary-alert">
