@@ -69,5 +69,13 @@
         <footer class="footer"></footer>
     </div>
     </main>
+<script>if (getSessionData('login').length > 1) {
+    const logButton = document.getElementById('logbutton');
+    logButton.innerHTML = 'Wyloguj';
+    logButton.onclick = () => {
+        localStorage.clear();
+        window.location = 'index.html';
+    };
+}</script>
 </body>
 </html>
