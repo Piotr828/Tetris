@@ -53,7 +53,7 @@ let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 let klocek, row, column, kolor;
 let aktualnyKlocek = null;
 let intervalId = null;
-
+let paused = false
 // dodaje klocek na plansze, iterujr przez jego macież i dla każdej 1 dodaje do planszy kolor klocka
 function dodajKlocekNaPlansze() {
     const { dane, pozycja, kolor } = aktualnyKlocek;
@@ -170,12 +170,13 @@ function nowyKlocek() {
             game_over();
             //window.location = 'index.html'
         }
+    if(!paused){
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
         pozycja: [-4, Math.floor(columns / 2) - 2], // startowa pozycja
         kolor: kolory[typKlocka - 1] // (tutaj można zmienić żeby kolor był random)
-    };
+    };}
 }
 
 function startgame(){
@@ -228,3 +229,14 @@ let x = `
 
     document.body.innerHTML = x
 }
+// system pauzy
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'p' || event.key === 'P') { // Sprawdzenie klawisza 'p'
+        paused = !paused; // Negacja zmiennej paused
+        if (!paused) {
+            nowyKlocek(); // Wywołaj funkcję, jeśli przełączono z true na false
+        }
+
+        console.log(`Paused: ${paused}`);
+    }
+});
