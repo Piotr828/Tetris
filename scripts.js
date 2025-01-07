@@ -209,7 +209,8 @@ function dodajXP(XP){
 //Sztuczne logowanie
 saveSessionData('login','Piotr')
 function game_over(){
-exec_py('dodajXP', getSessionData('login'),Math.round(usuniete*11.415926))
+    let punkty = Math.round(usuniete*10.4719755)
+exec_py('dodajXP', getSessionData('login'),punkty)
 let x = `
 
 </head>
@@ -217,7 +218,7 @@ let x = `
     <div class="alert summary-alert">
         <center><div class="summary-title">Koniec gry!</div></center>
         <span><strong>Usunięte wiersze:</strong> ${usuniete}</span>
-        <span><strong>Punkty:</strong> ${Math.round(usuniete*10.4719755)} </span>
+        <span><strong>Punkty:</strong> ${punkty} </span>
         <div class="buttons">
             <button class="menu-button" onclick="window.location='index.html'">Powrót do menu</button>
             <button class="play-button" onclick="window.location.reload();">Zagraj ponownie</button>
