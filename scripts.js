@@ -220,7 +220,7 @@ function dodajXP(XP){
 //Sztuczne logowanie
 saveSessionData('login','Piotr')
 function game_over(){
-    let punkty = usuniete*usuniete*usuniete;
+    let punkty = Math.ceil(10/Math.PI*usuniete+Math.log(usuniete));
     exec_py('dodajXP', getSessionData('login'),punkty)
 let x = `
 </head>
