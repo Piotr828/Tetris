@@ -37,12 +37,12 @@
                             <div class="card-body">
                                 <div class="slidecontainer">
                                     <label class="form-label">Głośność efektów</label>
-                                    <input type="range" min="1" max="100" value="50" class="slider" oninput="this.nextElementSibling.value = this.value">
+                                    <input type="range" min="0" max="100" value="50" class="slider" oninput="this.nextElementSibling.value = this.value">
                                     <output>50</output>
                                   </div>
                                   <div class="slidecontainer">
                                     <label class="form-label">Głośność muzyki</label>
-                                    <input type="range" min="1" max="100" value="50" class="slider" oninput="this.nextElementSibling.value = this.value">
+                                    <input type="range" min="0" max="100" value="50" class="slider" oninput="this.nextElementSibling.value = this.value">
                                     <output>50</output>
                                   </div>
                                   <div class="slidecontainer">
@@ -87,7 +87,6 @@
         </div>
         <div class="text-right mt-3">
             <button type="button" class="btn btn-primary">Zapisz zmiany</button>&nbsp;
-            <button type="button" class="btn btn-primary">Zaloguj się</button>&nbsp;
             <button type="button" onclick="window.location = 'index.html'" class="btn btn-default">Wyjdź</button>
         </div>
     </div>
