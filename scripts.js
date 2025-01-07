@@ -42,7 +42,7 @@ const klocki = {
         [1, 0, 0, 0]
     ]
 };
-
+let stopped = 0
 // zmienna przechowująca liczbę usuniętych wierszy; potrzebna do liczenia XP oraz prędkości upadku
 let usuniete = 0;
 const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
@@ -53,7 +53,7 @@ let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
 let klocek, row, column, kolor;
 let aktualnyKlocek = null;
 let intervalId = null;
-
+let paused = false
 // dodaje klocek na plansze, iterujr przez jego macież i dla każdej 1 dodaje do planszy kolor klocka
 function dodajKlocekNaPlansze() {
     const { dane, pozycja, kolor } = aktualnyKlocek;
@@ -170,13 +170,15 @@ function nowyKlocek() {
             game_over();
             //window.location = 'index.html'
         }
+           if(paused){stopped = 1}
+           else{
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
         pozycja: [-4, Math.floor(columns / 2) - 2], // startowa pozycja
         kolor: kolory[typKlocka - 1] // (tutaj można zmienić żeby kolor był random)
     };
-}
+}}
 
 function startgame(){
     nowyKlocek();// losuje klocek
@@ -228,3 +230,10 @@ let x = `
 
     document.body.innerHTML = x
 }
+// system pauzy
+document.addEventListener('keydown', (event) => {
+paused = !paused
+    if (stopped && paused){
+        stopped = !stopped
+    }
+});
