@@ -170,8 +170,16 @@ function nowyKlocek() {
             game_over();
             //window.location = 'index.html'
         }
-           if(paused){stopped = 1}
+           if(paused){stopped = 1;
+           document.getElementById('klocki').style.display = 'none'
+                          document.getElementById('pauza').style.display = 'block'
+
+           }
            else{
+               stopped = 0;
+               document.getElementById('klocki').style.display = 'inline-block'
+                          document.getElementById('pauza').style.display = 'none'
+
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
@@ -189,12 +197,13 @@ function startgame(){
     }, 500/(1+usuniete*0.2)); // zmiana czasu spadania wraz z poziomem gry (mozna zwiekszyc)
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') przesunKlocek('left');
-        else if (event.key === 'ArrowRight') przesunKlocek('right');
-        else if (event.key === 'ArrowDown') przesunKlocek('down');
-        else if (event.key === ' ') obrocKlocek();
-        rysujPlansze();
-    });
+        if (!stopped) {
+            if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
+            else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
+            else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
+            else if (event.key === ' ' || event.key === 'r') obrocKlocek();
+            rysujPlansze();
+        }});
 
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
@@ -232,8 +241,9 @@ let x = `
 }
 // system pauzy
 document.addEventListener('keydown', (event) => {
+    if (event.key === 'p' || event.key === 'P'){
 paused = !paused
     if (stopped && paused){
         stopped = !stopped
-    }
+    }}
 });
