@@ -371,7 +371,7 @@ def autolog(login_function, filename="data.txt"):
 
     
  
-    return log(login, password)
+    return login_function(login, password)
 
 #zapisanie xp do pliku
 def saveoffline(XP, filename="xp_data.txt"):
