@@ -306,3 +306,64 @@ def dodajXP(login, XP):
     obecne = loadxp(login)
     obecne += XP
     save(login,obecne)
+
+def change_password(login, new_password):
+    #sprawdzenie poprawności hasła
+    if not is_valid_password(new_password):
+        return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz jedną cyfrę."
+    
+    hashed_password = hashowanie_hasla(new_password)
+    try:
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+
+        # sprawdzenie czy użytkownik istnieje i sprawdzenie daty ostatniej zmiany hasłą
+        query = "SELECT last_password_change FROM users WHERE login = %s"
+        cursor.execute(query, (login,))
+        result = cursor.fetchone()
+
+        if result is None:
+            return "Użytkownik o podanym loginie nie istnieje."
+
+        last_password_change = result[0]
+        now=datetime.now()
+
+        #sprawdzenie czy minęło 30 dni od ostatniej zmiany hasła
+        if (now - last_password_change).total_seconds() < 2592000:  
+            return "Hasło można zmieniać tylko raz na 30 dni."
+
+        #zmiana hasła i zaktualizowanie zmiany hasła na obecną datę
+        query = "UPDATE users SET password = %s, last_password_change = %s WHERE login = %s"
+        cursor.execute(query, (hashed_password, now, login))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return "Hasło zostało zmienione."
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
+    
+def change_login(current_login, new_login):
+    #sprawdzenie czy login jest dostępny 
+    if not is_login_available(new_login):
+        return "Nazwa użytkownika jest już zajęta."
+    #sprawdzenie czy login jest alfanumeryczny i czy znakiem jest "_"
+    for char in new_login:
+        if not (char.isalnum() or char == "_"):
+            return "Login może zawierać tylko litery, cyfry i znak '_'."
+    try:
+        db_connection = connect_to_database()
+        cursor =db_connection.cursor()
+        #sprawdzenie czy użytkownik istnieje
+        cursor.execute("SELECT COUNT(*) FROM users WHERE login = %s",(current_login,))
+        result= cursor.fetchone()
+        if result[0]==0:
+            return "Użytkownik o podanej nazwie użytkownika nie istnieje."
+        #zmiana loginu
+        query= "UPDATE users SET  login = %s WHERE login = %s"
+        cursor.execute(query,(new_login,current_login))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return "Nazwa użytkownika została zmieniona."
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
