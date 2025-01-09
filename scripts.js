@@ -50,7 +50,7 @@ const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
 const rows = 20;
 const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
-let klocek, row, column, kolor;
+let row, column;
 let aktualnyKlocek = null;
 let intervalId = null;
 let paused = false
@@ -208,7 +208,7 @@ function startgame(){
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
 function putpixel(color,x,y){
-    document.getElementById("klocki").innerHTML += `<img src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
+    document.getElementById("klocki").innerHTML += `<img alt = 'Error' src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
 }
 
 function dodajXP(XP){
@@ -221,7 +221,7 @@ function dodajXP(XP){
 function game_over(){
     let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
     exec_py('dodajXP', getSessionData('login'),punkty)
-let x = `
+document.body.innerHTML = `
 </head>
 <body>
     <div class="alert summary-alert">
@@ -234,8 +234,6 @@ let x = `
         </div>
     </div>
 `
-
-    document.body.innerHTML = x
 }
 // system pauzy
 document.addEventListener('keydown', (event) => {
