@@ -302,10 +302,37 @@ def reset_password(email):
             return 0
     except mysql.connector.Error:
         return "Błąd bazy danych"
+        
 def dodajXP(login, XP):
-    obecne = loadxp(login)
-    obecne += XP
-    save(login,obecne)
+    obecne_xp = loadxp(login)
+    if isinstance(obecne_xp, str):
+        return obecne_xp
+    try:
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+        cursor.execute("SELECT best_score FROM users WHERE login = %s", (login,)) #pobieranie obecnego najlepszego wyniku
+        result = cursor.fetchone()
+        if not result:
+            cursor.close()
+            db_connection.close()
+            return "Użytkownik o podanej nazwie nie istnieje"
+        best_score = result[0]
+        obecne_xp += XP
+        #sprawdzenie czy obecny wynik jest wiekszy od najlepszego wyniku
+        if obecne_xp > best_score:
+            #aktualizacja xp i najlepszego wyniku
+            save(login, obecne_xp)
+            query = "UPDATE users SET best_score = %s WHERE login = %s"
+            cursor.execute(query, (obecne_xp, login))
+        else:
+            #aktualizacja xp
+            save(login, obecne_xp)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return 0
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
 
 def change_password(login, new_password):
     #sprawdzenie poprawności hasła
