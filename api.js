@@ -1,11 +1,9 @@
 function exec_py(functionName, ...args) {return window.pywebview.api.call_function(functionName, args).then(response => {return response;});}
 function reloadCSS() {
     if (document.getElementById('toreload')) { // Sprawdzamy, czy minęło 8 sekund
-        document.getElementById('toreload').href = document.getElementById('toreload').href + "?v="+currentTime
+        document.getElementById('toreload').href = document.getElementById('toreload').href + "?v="+Math.random()
     }
 }
-window.addEventListener('resize', () => {
-
   window.addEventListener('resize', () => {
     // HTML dla alertu i tła
     const alertHTML = `
@@ -67,7 +65,7 @@ window.addEventListener('resize', () => {
             overlayElement.remove();
         }
     }
-});
+
 
 
 

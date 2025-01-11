@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="css/navigation.css" id="toreload">
 </head>
 <body class="body">
+<audio autoplay loop style="display: none;">
+        <source src="music/introtetris.wav" type="audio/mpeg">
+    </audio>
     <main class="main">
         <header class="header">TETRIS</header>
         <img src="images/Tetr2_red.png" class="klocek_menu klocek" style="left: calc(50vw - 25vh); animation-delay: 0s">
@@ -55,15 +58,24 @@
 
         <nav class="navigation">
 
-            <button class="button" onclick="window.location='reg.html'">TUTORIAL</button>
-            <button class="button" onclick="window.location='game.html'">GRAJ</button>
-            <br>
-            <button class="button" onclick="window.location='leaderboard.html'">RANKING</button>
+            <button class="button" onclick="window.location='index.html'; alert('niedostępne')">TUTORIAL</button><br>
+            <button class="button" onclick="window.location='game.html'">GRAJ</button><br>
+            <button class="button" onclick="window.location='leaderboard.html'">RANKING</button><br>
+            <button class="button" onclick="window.location='ustawienia.html'">USTAWIENIA</button><br>
+            <button class="button" id="logbutton" onclick="window.location='log.html'">ZALOGUJ</button><br>
             <button class="button" onclick="exec_py('close')">WYJDŹ</button>
         </nav>
 
         <footer class="footer"></footer>
     </div>
     </main>
+<script>if (getSessionData('login').length > 1) {
+    const logButton = document.getElementById('logbutton');
+    logButton.innerHTML = 'Wyloguj';
+    logButton.onclick = () => {
+        localStorage.clear();
+        window.location = 'index.html';
+    };
+}</script>
 </body>
 </html>

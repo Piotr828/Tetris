@@ -12,45 +12,6 @@ db_name = 'u335644235_tetris'
 def close():
     os._exit(0)
 
-# def rotate(T,d):
-#     if d==1:
-#         return [[T[3 - j][i] for j in range(4)] for i in range(4)]
-#     elif d==-1:
-#         return [[T[j][3 - i] for j in range(4)] for i in range(4)]
-
-#funkcja umieszcza figure(piece-tablica 4x4) na planszy(board(20x20) w kolumnie(column)
-# def apply_piece_to_board(board, piece, column):
-#     rows, cols = len(board), len(board[0])
-# #stworzenie listy ze wspolrzendnymi i kolorem figury
-#     piece_shape = []
-#     for i in range(4):
-#         for j in range(4):
-#             if piece[i][j] != []:
-#                 piece_shape.append((i, j, piece[i][j]))
-# #wyszukiwanie najnizszej pozycji do umieszczenia figury
-#     lowest_row = rows - 1
-#     for r in range(rows):
-#         for row_piece, col_piece, color in piece_shape:
-#             board_row = r + row_piece
-#             board_col = column + col_piece
-#
-#             if board_row >= rows or board[board_row][board_col] != []:
-#                 lowest_row = r - 1
-#                 break
-#         else:
-#             continue
-#         break
-# #wypisanie game over jesli figura sie nie miesci
-#     if lowest_row < 0:
-#         return "Game Over"
-#
-#     new_board = [row[:] for row in board]
-# #dodanie figury do nowej kopii planszy
-#     for row_piece, col_piece, color in piece_shape:
-#         new_board[lowest_row + row_piece][column + col_piece] = color
-#
-#     return new_board
-
 load_dotenv()
 from dotenv import load_dotenv
 import os
@@ -307,11 +268,7 @@ def dodajXP(login, XP):
     obecne = loadxp(login)
     obecne += XP
     save(login,obecne)
-import os
-import random
-import string
-
-#szyfrowanie danych 
+#szyfrowanie danych
 class Cipher:
     def __init__(self, key_file="key.txt"):
 #dodać wiecej znaków jak potrzeba idk jakie mogą występować 
@@ -378,3 +335,65 @@ def saveoffline(XP, filename="xp_data.txt"):
     with open(filename, "w") as f:
         f.write(cipher.encrypt(str(XP)))
 
+
+
+def change_password(login, new_password):
+    #sprawdzenie poprawności hasła
+    if not is_valid_password(new_password):
+        return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz jedną cyfrę."
+
+    hashed_password = hashowanie_hasla(new_password)
+    try:
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+
+        # sprawdzenie czy użytkownik istnieje i sprawdzenie daty ostatniej zmiany hasłą
+        query = "SELECT last_password_change FROM users WHERE login = %s"
+        cursor.execute(query, (login,))
+        result = cursor.fetchone()
+
+        if result is None:
+            return "Użytkownik o podanym loginie nie istnieje."
+
+        last_password_change = result[0]
+        now=datetime.now()
+
+        #sprawdzenie czy minęło 30 dni od ostatniej zmiany hasła
+        if (now - last_password_change).total_seconds() < 2592000:
+            return "Hasło można zmieniać tylko raz na 30 dni."
+
+        #zmiana hasła i zaktualizowanie zmiany hasła na obecną datę
+        query = "UPDATE users SET password = %s, last_password_change = %s WHERE login = %s"
+        cursor.execute(query, (hashed_password, now, login))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return "Hasło zostało zmienione."
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
+
+def change_login(current_login, new_login):
+    #sprawdzenie czy login jest dostępny
+    if not is_login_available(new_login):
+        return "Nazwa użytkownika jest już zajęta."
+    #sprawdzenie czy login jest alfanumeryczny i czy znakiem jest "_"
+    for char in new_login:
+        if not (char.isalnum() or char == "_"):
+            return "Login może zawierać tylko litery, cyfry i znak '_'."
+    try:
+        db_connection = connect_to_database()
+        cursor =db_connection.cursor()
+        #sprawdzenie czy użytkownik istnieje
+        cursor.execute("SELECT COUNT(*) FROM users WHERE login = %s",(current_login,))
+        result= cursor.fetchone()
+        if result[0]==0:
+            return "Użytkownik o podanej nazwie użytkownika nie istnieje."
+        #zmiana loginu
+        query= "UPDATE users SET  login = %s WHERE login = %s"
+        cursor.execute(query,(new_login,current_login))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return "Nazwa użytkownika została zmieniona."
+    except mysql.connector.Error:
+        return "Błąd bazy danych"

@@ -6,16 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport"content="width=device-width,initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="reg.css">
+    <link rel="stylesheet" href="css/reg.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 </head>
 <script src="reg.js"></script>
 <script src="api.js"></script>
 <body style="background-color: purple">
+<audio autoplay loop style="display: none;">
+        <source src="music/introtetris.wav" type="audio/mpeg">
+    </audio>
     <div class="wrapper">
         <form action="">
-            <h1>Rejstracja</h1>
+            <h1>Rejestracja</h1>
             <div class="input-box">
         <input type="text" placeholder="Login" id="login" required>
                 <i class='bx bxs-user'></i>
@@ -35,7 +38,7 @@
                 <i class='bx bxs-lock-alt'></i>
             </div>
           <div style="color: red; line-height: 0;" id="err"></div><br>
-            <input value="Zarejestruj" type="submit" class="btn" onclick="register(document.getElementById('mail').value,document.getElementById('login').value,document.getElementById('haslo1').value,document.getElementById('haslo2').value)">
+            <input value="Zarejestruj" type="button" class="btn" onclick="register(document.getElementById('mail').value,document.getElementById('login').value,document.getElementById('haslo1').value,document.getElementById('haslo2').value)">
             <div class="register-link">
                 <p>Masz konto? <a href="log.html">Zaloguj!</a>
 

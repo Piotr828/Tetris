@@ -42,7 +42,7 @@ const klocki = {
         [1, 0, 0, 0]
     ]
 };
-
+let stopped = 0
 // zmienna przechowująca liczbę usuniętych wierszy; potrzebna do liczenia XP oraz prędkości upadku
 let usuniete = 0;
 const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
@@ -50,10 +50,10 @@ const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
 const rows = 20;
 const columns = 10;
 let plansza = Array.from({ length: rows }, () => Array(columns).fill(0));
-let klocek, row, column, kolor;
+let row, column;
 let aktualnyKlocek = null;
 let intervalId = null;
-
+let paused = false
 // dodaje klocek na plansze, iterujr przez jego macież i dla każdej 1 dodaje do planszy kolor klocka
 function dodajKlocekNaPlansze() {
     const { dane, pozycja, kolor } = aktualnyKlocek;
@@ -170,13 +170,23 @@ function nowyKlocek() {
             game_over();
             //window.location = 'index.html'
         }
+           if(paused){stopped = 1;
+           document.getElementById('klocki').style.display = 'none'
+                          document.getElementById('pauza').style.display = 'block'
+
+           }
+           else{
+               stopped = 0;
+               document.getElementById('klocki').style.display = 'inline-block'
+                          document.getElementById('pauza').style.display = 'none'
+
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
         pozycja: [-4, Math.floor(columns / 2) - 2], // startowa pozycja
         kolor: kolory[typKlocka - 1] // (tutaj można zmienić żeby kolor był random)
     };
-}
+}}
 
 function startgame(){
     nowyKlocek();// losuje klocek
@@ -187,17 +197,18 @@ function startgame(){
     }, 500/(1+usuniete*0.2)); // zmiana czasu spadania wraz z poziomem gry (mozna zwiekszyc)
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') przesunKlocek('left');
-        else if (event.key === 'ArrowRight') przesunKlocek('right');
-        else if (event.key === 'ArrowDown') przesunKlocek('down');
-        else if (event.key === ' ') obrocKlocek();
-        rysujPlansze();
-    });
+        if (!stopped) {
+            if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
+            else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
+            else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
+            else if (event.key === ' ' || event.key === 'r') obrocKlocek();
+            rysujPlansze();
+        }});
 
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
 function putpixel(color,x,y){
-    document.getElementById("klocki").innerHTML += `<img src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
+    document.getElementById("klocki").innerHTML += `<img alt = 'Error' src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
 }
 
 function dodajXP(XP){
@@ -207,23 +218,28 @@ function dodajXP(XP){
     }
 }
 //Sztuczne logowanie
-saveSessionData('login','Piotr')
 function game_over(){
-exec_py('dodajXP', getSessionData('login'),Math.round(usuniete*11.415926))
-let x = `
-
+    let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
+    exec_py('dodajXP', getSessionData('login'),punkty)
+document.body.innerHTML = `
 </head>
 <body>
     <div class="alert summary-alert">
         <center><div class="summary-title">Koniec gry!</div></center>
         <span><strong>Usunięte wiersze:</strong> ${usuniete}</span>
-        <span><strong>Punkty:</strong> ${Math.round(usuniete*10.4719755)} </span>
+        <span><strong>Punkty:</strong> ${punkty} </span>
         <div class="buttons">
             <button class="menu-button" onclick="window.location='index.html'">Powrót do menu</button>
             <button class="play-button" onclick="window.location.reload();">Zagraj ponownie</button>
         </div>
     </div>
 `
-
-    document.body.innerHTML = x
 }
+// system pauzy
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'p' || event.key === 'P'){
+paused = !paused
+    if (stopped && paused){
+        stopped = !stopped
+    }}
+});

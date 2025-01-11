@@ -171,3 +171,12 @@
     0%{bottom: 120dvh;}
     100%{bottom: 65dvh;}
     }
+#pauza{
+color: white;
+    position: fixed;
+    left: calc(50% - 50px);
+    top: 50px;
+    z-index: 70;
+    font-size: 100px;
+    font-family: sans-serif;
+}
