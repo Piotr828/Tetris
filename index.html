@@ -60,22 +60,34 @@
 
             <button class="button" onclick="window.location='index.html'; alert('niedostępne')">TUTORIAL</button><br>
             <button class="button" onclick="window.location='game.html'">GRAJ</button><br>
-            <button class="button" onclick="window.location='leaderboard.html'">RANKING</button><br>
+            <span id="rank"><button class="button" onclick="window.location='leaderboard.html'" >RANKING</button><br>
+             <button class="button" id="logbutton" onclick="window.location='log.html'">ZALOGUJ</button><br></span>
             <button class="button" onclick="window.location='ustawienia.html'">USTAWIENIA</button><br>
-            <button class="button" id="logbutton" onclick="window.location='log.html'">ZALOGUJ</button><br>
+
             <button class="button" onclick="exec_py('close')">WYJDŹ</button>
         </nav>
 
         <footer class="footer"></footer>
     </div>
     </main>
-<script>if (getSessionData('login').length > 1) {
+<script>
+    setTimeout(() => {
+    exec_py('ping_domena', 'google.com').then(result => {
+        if (!result) {
+            document.getElementById('logbutton').style.display = 'none';
+            document.getElementById('rank').style.display = 'none';
+        }
+    });
+}, 200);
+
+    if (getSessionData('login').length > 1) {
     const logButton = document.getElementById('logbutton');
     logButton.innerHTML = 'Wyloguj';
     logButton.onclick = () => {
         localStorage.clear();
         window.location = 'index.html';
     };
+
 }</script>
 </body>
 </html>

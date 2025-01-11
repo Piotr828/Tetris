@@ -1,4 +1,4 @@
-function zaloguj(login,password){
+function zaloguj(login,password, rem){
 
         exec_py('log', login, password).then(result => {
         if(result){document.getElementById('err').innerText = (result)}
@@ -8,6 +8,8 @@ function zaloguj(login,password){
             }
         });
 
-
+if (rem){
+    exec_py()
+}
 
 }
