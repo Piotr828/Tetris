@@ -113,3 +113,10 @@ function getSessionData(key) {
     }
     return null; // Zwracamy null, jeśli dane nie istnieją
 }
+document.addEventListener('keydown', function (event) {
+    // Sprawdź, czy wciśnięto klawisz F5
+    if (event.key === 'F5') {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu F5
+        location.reload(); // Odświeża stronę
+    }
+});
