@@ -367,3 +367,68 @@ def change_login(current_login, new_login):
         return "Nazwa użytkownika została zmieniona."
     except mysql.connector.Error:
         return "Błąd bazy danych"
+class Cipher:
+    def __init__(self, key_file="key.txt"):
+#dodać wiecej znaków jak potrzeba idk jakie mogą występować
+        self.chars = " " + string.punctuation + string.digits + string.ascii_letters
+        self.chars = list(self.chars)
+        self.key_file = key_file
+        self.key = self.load_or_generate_key()
+#generuje klucz według którego szyfruje lub go oddczytuje jeśli istnieje
+    def load_or_generate_key(self):
+        if os.path.exists(self.key_file):
+            with open(self.key_file, "r") as f:
+                return list(f.read().strip())
+        else:
+            key = self.chars.copy()
+            random.shuffle(key)
+            with open(self.key_file, "w") as f:
+                f.write("".join(key))
+            return key
+
+    def encrypt(self, text):
+        cipher_text = ""
+        for letter in text:
+            index = self.chars.index(letter)
+            cipher_text += self.key[index]
+        return cipher_text
+
+    def decrypt(self, cipher_text):
+        text = ""
+        for letter in cipher_text:
+            index = self.key.index(letter)
+            text += self.chars[index]
+        return text
+
+cipher = Cipher()
+
+#zapisanie loginu i hasła do pliku
+def remember(login, password, filename="data.txt"):
+    with open(filename, "w") as f:
+        f.write(cipher.encrypt(login) + "\n")
+        f.write(cipher.encrypt(password))
+
+#próba automatycznego logowania
+def autolog(filename="data.txt"):
+    if not os.path.exists(filename):
+        print("Brak pliku z zapisanymi danymi logowania.")
+        return False
+
+    with open(filename, "r") as f:
+        lines = f.readlines()
+        if len(lines) < 2:
+            print("Plik nie zawiera wystarczających danych logowania.")
+            return False
+
+
+        login = cipher.decrypt(lines[0].strip())
+        password = cipher.decrypt(lines[1].strip())
+
+
+    if not log(login, password):
+        return login
+
+#zapisanie xp do pliku
+def saveoffline(XP, filename="xp_data.txt"):
+    with open(filename, "w") as f:
+        f.write(cipher.encrypt(str(XP)))

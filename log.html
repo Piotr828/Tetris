@@ -33,17 +33,18 @@
             <div class="remember-forgot">
 
                 <label style="margin-top: 12px">
-                    <input type="checkbox" id="remem"> Zapamiętaj mnie
+                    <input type="checkbox" onclick="loguj = !loguj"> Zapamiętaj mnie
                 </label>
                 <a href="reg.html" style="margin-top: 12px">Zapomniałeś hasła?</a>
 
             </div>
             <button type="button" class="btn" onclick="
-            zaloguj(document.getElementById('nickmail').value,document.getElementById('pass').value,document.getElementById('remem').value);">Zaloguj</button>
+            zaloguj(document.getElementById('nickmail').value,document.getElementById('pass').value,loguj);">Zaloguj</button>
             <div class="register-link">
                 <p>Nie masz konta? <a href="reg.html">Zarejestruj!</a>
             </div>
         </form>
     </div>
 <script src="login.js"></script>
+<script>let loguj = false;</script>
 </body>

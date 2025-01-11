@@ -61,7 +61,7 @@
             <button class="button" onclick="window.location='index.html'; alert('niedostępne')">TUTORIAL</button><br>
             <button class="button" onclick="window.location='game.html'">GRAJ</button><br>
             <span id="rank"><button class="button" onclick="window.location='leaderboard.html'" >RANKING</button><br>
-             <button class="button" id="logbutton" onclick="window.location='log.html'">ZALOGUJ</button><br></span>
+             <button class="button" id="logbutton" onclick="exec_py('autolog').then(result => {saveSessionData('login',result); if (!getSessionData('login')){window.location='log.html'}else{location.reload()}});">ZALOGUJ</button><br></span>
             <button class="button" onclick="window.location='ustawienia.html'">USTAWIENIA</button><br>
 
             <button class="button" onclick="exec_py('close')">WYJDŹ</button>
@@ -79,15 +79,17 @@
         }
     });
 }, 200);
-
-    if (getSessionData('login').length > 1) {
+  setTimeout(() => {
+    if (getSessionData('login')&&getSessionData('login').length > 1) {
     const logButton = document.getElementById('logbutton');
     logButton.innerHTML = 'Wyloguj';
     logButton.onclick = () => {
         localStorage.clear();
+        exec_py('remember','','');
         window.location = 'index.html';
     };
 
-}</script>
+}
+}, 150);</script>
 </body>
 </html>

@@ -9,7 +9,7 @@ function zaloguj(login,password, rem){
         });
 
 if (rem){
-    exec_py()
+    exec_py('remember',login,password)
 }
 
 }
