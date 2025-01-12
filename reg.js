@@ -10,3 +10,4 @@ function register(mail,login,haslo1, haslo2) {
         document.getElementById('err').innerText = "Hasła nie są takie same"
     }
 }
+setMusicVolume()

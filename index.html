@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="css/navigation.css" id="toreload">
 </head>
 <body class="body">
-<audio autoplay loop style="display: none;">
+<audio autoplay loop style="display: none;" id="music">
         <source src="music/introtetris.wav" type="audio/mpeg">
     </audio>
     <main class="main">
@@ -71,6 +71,9 @@
     </div>
     </main>
 <script>
+
+
+setMusicVolume()
     setTimeout(() => {
     exec_py('ping_domena', 'google.com').then(result => {
         if (!result) {
@@ -84,7 +87,7 @@
     const logButton = document.getElementById('logbutton');
     logButton.innerHTML = 'Wyloguj';
     logButton.onclick = () => {
-        localStorage.clear();
+        saveSessionData('login',null);
         exec_py('remember','','');
         window.location = 'index.html';
     };

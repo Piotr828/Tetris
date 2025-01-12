@@ -1,3 +1,4 @@
+setMusicVolume()
 function pokaz() {
   exec_py('leaderboard').then(result => {
     const tbody = document.getElementById('ranking');

@@ -120,3 +120,18 @@ document.addEventListener('keydown', function (event) {
         location.reload(); // Odświeża stronę
     }
 });
+
+function setMusicVolume() {
+    const musicVol = getSessionData('music_vol'); // Pobranie wartości z funkcji
+
+    // Sprawdzenie, czy wartość jest `null` lub `undefined`, jeśli tak, ustaw na 50%, inaczej na pobraną wartość
+    const volume = musicVol ?? 20;
+
+    // Znalezienie pierwszego elementu audio na stronie i ustawienie głośności
+    const musicElement = document.querySelector('audio');
+    if (musicElement) {
+        musicElement.volume = volume / 1000; // Ustawienie głośności (zakres 0-1)
+    } else {
+        console.error("Element audio nie został znaleziony.");
+    }
+}

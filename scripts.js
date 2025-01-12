@@ -243,3 +243,4 @@ paused = !paused
         stopped = !stopped
     }}
 });
+setMusicVolume()

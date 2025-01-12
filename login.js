@@ -13,3 +13,4 @@ if (rem){
 }
 
 }
+setMusicVolume()
