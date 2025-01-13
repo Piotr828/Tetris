@@ -99,10 +99,29 @@ def is_login_available(login):
             return True
     except mysql.connector.Error:
         return Exception("Błąd bazy danych.")
+        
+def is_email_available(email):
+    try:
+        db_connection=connect_to_database()
+        cursor=db_connection.cursor()
+        query="SELECT COUNT(*) FORM users WHERE LOWER(email) = LOWER(%s);"
+        cursor.execute(query,(email,))
+        result=cursor.fetchone()
+        cursor.close()
+        db_connection.close()
+        if result[0]>0: #gdy wynik jest inny niz 0 to email jest juz zajety
+            return False
+        else:
+            return True
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
 
 def register(login,password,email):
     # sprawdzenie poprawnosci maila
     domena=email.split("@")[-1]
+
+    if not is_email_available(email):
+        return "Użytkownik o podanym adresie email jest już zarejestrowany."
 
     if not is_valid_email(email):
         return "Nieprawidłowy adres e-mail."
