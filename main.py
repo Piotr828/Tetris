@@ -162,7 +162,7 @@ def register(login,password,email):
         return Exception("Błąd bazy danych.")
 
     
-def log(login,password):
+def log(identifier,password):
 #haszowanie hasła
     hashed_password=hashowanie_hasla(password)
     
@@ -170,10 +170,13 @@ def log(login,password):
         #łączenie z bazą danych
         db_connection = connect_to_database()
         cursor = db_connection.cursor()
-        query = "SELECT password FROM users WHERE login = %s" #pobranie hasła przypisanego do podanego loginu
-        cursor.execute(query,(login,))
+        if "@" in identifier:
+            query = "SELECT password FROM users WHERE email = %s"  #pobranie hasła przypisanego do podanego emaila
+        else:
+            query = "SELECT password FROM users WHERE login = %s" #pobranie hasła przypisanego do podanego loginu
+        cursor.execute(query,(identifier,))
         result=cursor.fetchone()
-        #nieprawidłowy login
+        #nieprawidłowy login lub email
         if result is None:
             return "Nieprawidłowe dane logowania."
         saved_password=result[0]
@@ -352,6 +355,67 @@ def change_login(current_login, new_login):
         return "Nazwa użytkownika została zmieniona."
     except mysql.connector.Error:
         return "Błąd bazy danych"
+
+def change_email(login,new_email):
+    if not is_valid_email(new_email):
+        return "Nowy adres e-mail jest nieprawidłowy."
+    if not is_email_available(new_email):
+        return "Nowy adres e-mail jest już zajęty."
+    try:
+        db_connection=connect_to_database()
+        cursor=db_connection.cursor()
+        # sprawdzenie czy użytkownik istnieje
+        cursor.execute("SELECT COUNT(*) FROM users WHERE login = %s", (login,))
+        result = cursor.fetchone()
+        if result[0] == 0:
+            return "Użytkownik o podanej nazwie użytkownika nie istnieje."
+        #zmiana email
+        query= "UPDATE users SET email = %s WHERE login = %s"
+        cursor.execute(query,(new_email,login))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return "Adres email został zmieniony."
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
+
+def get_login_by_email(email):
+    try:
+        db_connection=connect_to_database()
+        cursor=db_connection.cursor()
+        query= "SELECT login FROM users WHERE email = %s;"
+        cursor.execute(query,(email,))
+        result=cursor.fetchone()
+        cursor.close()
+        db_connection.close()
+        if result:
+            return result[0]
+        else:
+            return "Nie znaleziono użytkownika o podanym adresie email."
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
+
+#usuwanie użytkownika z bazy danych o podanym loginie
+def delete_user_by_login(login):
+    try:
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+        # sprawdzenie czy login istnieje w bazie danych
+        check_query = "SELECT COUNT(*) FROM users WHERE login = %s;"
+        cursor.execute(check_query, (login,))
+        result = cursor.fetchone()
+        if result[0] == 0:
+            cursor.close()
+            db_connection.close()
+            return "Użytkownik o podanym loginie nie istnieje."
+        query = "DELETE FROM users WHERE login = %s;"
+        cursor.execute(query,(login,))
+        db_connection.commit()
+        cursor.close()
+        return "Użytkownik został usunięty"
+    except mysql.connector.Error():
+        return "Błąd bazy danych."
+        
 class Cipher:
     def __init__(self, key_file="key.txt"):
 #dodać wiecej znaków jak potrzeba idk jakie mogą występować
