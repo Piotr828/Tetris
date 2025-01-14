@@ -26,7 +26,7 @@
                         <a class="list-group-item list-group-item-action active" data-toggle="list"
                             href="#account-general">Ustawienia gry</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-change-password">Ustawienia konta</a>
+                            href="#account-change-password" id="acc">Ustawienia konta</a>
                         
                         
                     </div>
@@ -76,8 +76,10 @@
                                     <label class="form-label">Zmień E-mail</label>
                                     <input type="text" class="form-control mb-1" id="nmail">
                                     <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i
-                                        class="ion ion-md-close"></i> Usuń konto </a>
-                                    
+                                        class="ion ion-md-close"></i> Usuń konto </a><br>
+                                    <hr>
+                                    <label class="form-label">Podaj Hasło</label>
+                                    <input type="password" class="form-control mb-1" id="opass">
                                 </div>
                                 
                             </div>
@@ -85,10 +87,13 @@
                         
                     </div>
                 </div>
+                                        <span id="err" style="text-align: right; color: red; width: 100%"></span>
+
             </div>
+
         </div>
         <div class="text-right mt-3">
-            <button type="button" class="btn btn-primary" onclick="zapisz_ustawienia(document.getElementById('eff').value, document.getElementById('msc').value,off,document.getElementById('nlogin').value, document.getElementById('npass').value, document.getElementById('nmail').value)">Zapisz zmiany</button>&nbsp;
+            <button type="button" class="btn btn-primary" onclick="zapisz_ustawienia(document.getElementById('eff').value, document.getElementById('msc').value,off,document.getElementById('nlogin').value, document.getElementById('npass').value, document.getElementById('nmail').value, document.getElementById('opass').value)">Zapisz zmiany</button>&nbsp;
             <button type="button" onclick="window.location = 'index.html'" class="btn btn-default">Wyjdź</button>
         </div>
     </div>
