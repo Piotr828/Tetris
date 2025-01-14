@@ -4,29 +4,16 @@ import string
 import random
 import datetime
 import os
-from dotenv import load_dotenv
-import os
 
 # Wczytaj zmienne środowiskowe z pliku .env
-load_dotenv()
 
-# Pobierz wartości zmiennych środowiskowych
-db_host = os.getenv('DB_HOST')
-db_user = os.getenv('DB_USER')
-db_password = os.getenv('DB_PASS')
-db_name = os.getenv('DB_NAME')
+db_host = 'srv1628.hstgr.io'
+db_user = 'u335644235_sqlAdmin'
+db_password = 'bZ6sCKAU3E'
+db_name = 'u335644235_tetris'
+
 def close():
     os._exit(0)
-
-
-
-# Załaduj zmienne środowiskowe z pliku .env (jeśli istnieje)
-load_dotenv()
-
-# Pobierz zmienne środowiskowe
-
-# Sprawdź, czy wszystkie zmienne zostały poprawnie załadowane
-
 
 def connect_to_database():
     try:
@@ -295,7 +282,9 @@ def dodajXP(login, XP):
     obecne += XP
     save(login,obecne)
 
-def change_password(login, new_password):
+def change_password(login, new_password, password):
+    if log(login, password) != 0:
+        return "Błędne hasło"
     #sprawdzenie poprawności hasła
     if not is_valid_password(new_password):
         return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz jedną cyfrę."
@@ -310,28 +299,18 @@ def change_password(login, new_password):
         cursor.execute(query, (login,))
         result = cursor.fetchone()
 
-        if result is None:
-            return "Użytkownik o podanym loginie nie istnieje."
-
-        last_password_change = result[0]
-        now=datetime.now()
-
-        #sprawdzenie czy minęło 30 dni od ostatniej zmiany hasła
-        if (now - last_password_change).total_seconds() < 2592000:  
-            return "Hasło można zmieniać tylko raz na 30 dni."
-
         #zmiana hasła i zaktualizowanie zmiany hasła na obecną datę
-        query = "UPDATE users SET password = %s, last_password_change = %s WHERE login = %s"
-        cursor.execute(query, (hashed_password, now, login))
+        query = "UPDATE users SET password = %s WHERE login = %s"
+        cursor.execute(query, (hashed_password, login))
         db_connection.commit()
         cursor.close()
         db_connection.close()
-        return "Hasło zostało zmienione."
+        return 0
     except mysql.connector.Error:
         return "Błąd bazy danych."
-    
-def change_login(current_login, new_login):
-    #sprawdzenie czy login jest dostępny 
+def change_login(current_login, new_login, password):
+    if log(current_login, password) != 0:
+        return "Nieprawidłowe dane"    #sprawdzenie czy login jest dostępny
     if not is_login_available(new_login):
         return "Nazwa użytkownika jest już zajęta."
     #sprawdzenie czy login jest alfanumeryczny i czy znakiem jest "_"
@@ -356,7 +335,9 @@ def change_login(current_login, new_login):
     except mysql.connector.Error:
         return "Błąd bazy danych"
 
-def change_email(login,new_email):
+def change_email(login,new_email, password):
+    if log(login, password) != 0:
+        return "Błędne hasło"
     if not is_valid_email(new_email):
         return "Nowy adres e-mail jest nieprawidłowy."
     if not is_email_available(new_email):
@@ -415,7 +396,7 @@ def delete_user_by_login(login):
         return "Użytkownik został usunięty"
     except mysql.connector.Error():
         return "Błąd bazy danych."
-        
+
 class Cipher:
     def __init__(self, key_file="key.txt"):
 #dodać wiecej znaków jak potrzeba idk jakie mogą występować
@@ -434,49 +415,38 @@ class Cipher:
             with open(self.key_file, "w") as f:
                 f.write("".join(key))
             return key
-
     def encrypt(self, text):
         cipher_text = ""
         for letter in text:
             index = self.chars.index(letter)
             cipher_text += self.key[index]
         return cipher_text
-
     def decrypt(self, cipher_text):
         text = ""
         for letter in cipher_text:
             index = self.key.index(letter)
             text += self.chars[index]
         return text
-
 cipher = Cipher()
-
 #zapisanie loginu i hasła do pliku
 def remember(login, password, filename="data.txt"):
     with open(filename, "w") as f:
         f.write(cipher.encrypt(login) + "\n")
         f.write(cipher.encrypt(password))
-
 #próba automatycznego logowania
 def autolog(filename="data.txt"):
     if not os.path.exists(filename):
         print("Brak pliku z zapisanymi danymi logowania.")
         return False
-
     with open(filename, "r") as f:
         lines = f.readlines()
         if len(lines) < 2:
             print("Plik nie zawiera wystarczających danych logowania.")
             return False
-
-
         login = cipher.decrypt(lines[0].strip())
         password = cipher.decrypt(lines[1].strip())
-
-
     if not log(login, password):
         return login
-
 #zapisanie xp do pliku
 def saveoffline(XP, filename="xp_data.txt"):
     with open(filename, "w") as f:
