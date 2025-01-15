@@ -224,6 +224,11 @@ function dodajXP(XP){
 //Sztuczne logowanie
 function game_over(){
     let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
+    exec_py('ping_domena','google.pl').then(result => {
+        if(!result && getSessionData('offsave')){
+            exec_py('saveoffline',punkty)
+        }
+    });
     exec_py('dodajXP', getSessionData('login'),punkty)
 document.body.innerHTML = `
 </head>

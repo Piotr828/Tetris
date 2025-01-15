@@ -280,7 +280,7 @@ def reset_password(email):
 def dodajXP(login, XP):
     obecne = loadxp(login)
     obecne += XP
-    save(login,obecne)
+    return save(login,obecne)
 
 def change_password(login, new_password, password):
     if log(login, password) != 0:
@@ -449,5 +449,5 @@ def autolog(filename="data.txt"):
         return login
 #zapisanie xp do pliku
 def saveoffline(XP, filename="xp_data.txt"):
-    with open(filename, "w") as f:
-        f.write(cipher.encrypt(str(XP)))
+    with open(filename, "a") as f:  # "a" oznacza tryb dopisywania
+        f.write(cipher.encrypt(str(XP)) + "\n")  # Dodanie nowej linii po każdej wartości
