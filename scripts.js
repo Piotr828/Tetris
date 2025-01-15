@@ -142,6 +142,9 @@ function przesunKlocek(kierunek) {
     if (kierunek === 'down') startRow++;
     else if (kierunek === 'left') startCol--;
     else if (kierunek === 'right') startCol++;
+    else if (kierunek === 'drop') while (!czyKolizja(dane, [startRow+1, startCol])){
+    startRow++;
+    };
 
     if (!czyKolizja(dane, [startRow, startCol])) {
         aktualnyKlocek.pozycja = [startRow, startCol]; // jesli nie ma kolizji zmienia jego pozycje
@@ -201,6 +204,7 @@ function startgame(){
             if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
             else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
             else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
+            else if (event.key === 'ArrowUp' || event.key === 'w') przesunKlocek('drop');
             else if (event.key === ' ' || event.key === 'r') obrocKlocek();
             rysujPlansze();
         }});
