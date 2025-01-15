@@ -331,7 +331,7 @@ def change_login(current_login, new_login, password):
         db_connection.commit()
         cursor.close()
         db_connection.close()
-        return "Nazwa użytkownika została zmieniona."
+        return 0
     except mysql.connector.Error:
         return "Błąd bazy danych"
 
@@ -356,7 +356,7 @@ def change_email(login,new_email, password):
         db_connection.commit()
         cursor.close()
         db_connection.close()
-        return "Adres email został zmieniony."
+        return 0
     except mysql.connector.Error:
         return "Błąd bazy danych."
 
@@ -393,7 +393,7 @@ def delete_user_by_login(login):
         cursor.execute(query,(login,))
         db_connection.commit()
         cursor.close()
-        return "Użytkownik został usunięty"
+        return 0
     except mysql.connector.Error():
         return "Błąd bazy danych."
 
