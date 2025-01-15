@@ -1,14 +1,11 @@
 if (getSessionData('login') == null){document.getElementById('acc').style.display='none'}
 function del(old){
     let dane = false
-    alert(' 1/3 Usuwam konto o loginie: ' + getSessionData('login') + 'i haśle: ' + old)
     exec_py('log',getSessionData('login'),old).then(result => {
-            alert(' 2/3 Usuwam konto o loginie: ' + getSessionData('login') + 'i haśle: ' + old)
         if(result){document.getElementById('err').innerText = result}
             else{dane =true}
             if(dane){
             exec_py('delete_user_by_login',getSessionData('login')).then(result => {
-                    alert('3/3 Usuwam konto o loginie: ' + getSessionData('login') + 'i haśle: ' + old)
 
                 if(result){document.getElementById('err').innerText = result}
                 else{
