@@ -4,7 +4,8 @@ import string
 import random
 import datetime
 import os
-
+import smtplib
+from email.message import EmailMessage
 # Wczytaj zmienne środowiskowe z pliku .env
 
 db_host = 'srv1628.hstgr.io'
@@ -451,3 +452,81 @@ def autolog(filename="data.txt"):
 def saveoffline(XP, filename="xp_data.txt"):
     with open(filename, "a") as f:  # "a" oznacza tryb dopisywania
         f.write(cipher.encrypt(str(XP)) + "\n")  # Dodanie nowej linii po każdej wartości
+
+def send_password_change_email(your_password:str, new_password: str, email_address: str):
+    
+    SMTP_SERVER = "smtp.gmail.com"
+    SMTP_PORT = 587
+    SMTP_USER = "tetrissuport@gmail.com"  
+    #SMTP_PASSWORD = "eect bqew nxtf ltgr"       
+    SMTP_PASSWORD = str(your_password)
+    
+    subject = "Zmiana hasła - Powiadomienie"
+    body = f"""
+    Szanowny Użytkowniku,
+
+    Informujemy, że Twoje hasło zostało pomyślnie zmienione.
+
+    Nowe hasło: {new_password}
+
+    Jeśli to nie Ty inicjowałeś tę zmianę, prosimy o pilny kontakt z naszym zespołem wsparcia.
+
+    Pozdrawiamy.
+    """
+
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = SMTP_USER
+    msg["To"] = email_address
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()  
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(msg)
+            print("Wiadomość e-mail została wysłana pomyślnie.")
+    except Exception as e:
+        print(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
+
+def save_settings(eff_vol, msc_vol, fq, offsave):
+    
+    with open("settings.txt", "w") as file:
+        file.write(f"{eff_vol}\n")
+        file.write(f"{msc_vol}\n")
+        file.write(f"{fq}\n")
+        file.write(f"{offsave}\n")
+
+def load_settings():
+    
+    try:
+        with open("settings.txt", "r") as file:
+            lines = file.readlines()
+        return [int(line.strip()) for line in lines] 
+    except FileNotFoundError:
+        print("Plik ustawień nie został znaleziony.")
+        return []
+    except ValueError:
+        print("Plik ustawień zawiera błędne dane.")
+        return []
+
+
+def load_off_xp(filename="xp_data.txt"):
+    if not os.path.exists(filename):
+        print("Brak pliku z zapisanymi xp.")
+        return False 
+    
+    total_xp = 0
+    with open(filename, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if line.strip():  
+                total_xp += int(cipher.decrypt(line.strip()))
+    
+    with open(filename, "w") as f:
+        f.truncate(0)
+
+    return total_xp
+
+
+ 
