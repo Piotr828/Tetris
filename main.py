@@ -185,15 +185,20 @@ def save(login,xp):
         db_connection = connect_to_database()
         cursor = db_connection.cursor()
         #sprawdzenie czy użytkownik o tej nazwie istnieje w bazie danych
-        cursor.execute("SELECT COUNT(*) FROM users WHERE login = %s", (login,))
+        cursor.execute("SELECT COUNT(*), best_score FROM users WHERE login = %s", (login,))
         result = cursor.fetchone()
         if result[0]==0:
             cursor.close()
             db_connection.close()
             return "Użytkownik o podanej nazwie nie istnieje"
         #aktualizacja xp
-        query = "UPDATE users SET xp = %s WHERE login = %s"
-        cursor.execute(query,(xp,login))
+        best_score=result[1]
+        if xp> best_score:
+            query = "UPDATE users SET xp = %s, best_score = %s WHERE login = %s"
+            cursor.execute(query,(xp,xp,login))
+        else:
+            query = "UPDATE users SET xp = %s WHERE login = %s"
+            cursor.execute(query,(xp,login))
         db_connection.commit()
         cursor.close()
         db_connection.close()
