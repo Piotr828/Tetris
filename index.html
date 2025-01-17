@@ -83,9 +83,9 @@ setMusicVolume()
     });
 }, 200);
   setTimeout(() => {
-    if (getSessionData('login')&&getSessionData('login').length > 1) {
+    if (getSessionData('login')&&getSessionData('login').length >= 1) {
     const logButton = document.getElementById('logbutton');
-    logButton.innerHTML = 'Wyloguj';
+    logButton.innerHTML = 'WYLOGUJ';
     logButton.onclick = () => {
         saveSessionData('login',null);
         exec_py('remember','','');

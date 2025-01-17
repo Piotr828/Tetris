@@ -142,6 +142,9 @@ function przesunKlocek(kierunek) {
     if (kierunek === 'down') startRow++;
     else if (kierunek === 'left') startCol--;
     else if (kierunek === 'right') startCol++;
+    else if (kierunek === 'drop') while (!czyKolizja(dane, [startRow+1, startCol])){
+    startRow++;
+    };
 
     if (!czyKolizja(dane, [startRow, startCol])) {
         aktualnyKlocek.pozycja = [startRow, startCol]; // jesli nie ma kolizji zmienia jego pozycje
@@ -201,6 +204,7 @@ function startgame(){
             if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
             else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
             else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
+            else if (event.key === 'ArrowUp' || event.key === 'w') przesunKlocek('drop');
             else if (event.key === ' ' || event.key === 'r') obrocKlocek();
             rysujPlansze();
         }});
@@ -220,6 +224,11 @@ function dodajXP(XP){
 //Sztuczne logowanie
 function game_over(){
     let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
+    exec_py('ping_domena','google.pl').then(result => {
+        if(!result && getSessionData('offsave')){
+            exec_py('saveoffline',punkty)
+        }
+    });
     exec_py('dodajXP', getSessionData('login'),punkty)
 document.body.innerHTML = `
 </head>
