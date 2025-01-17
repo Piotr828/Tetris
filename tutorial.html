@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tetris Game</title>
+    <script src="api.js"></script>
+    <script src="scripts.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Language" content="pl">
+    <meta name="author" content="Twoje Imię i Nazwisko">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="X-Frame-Options" content="deny">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="application-name" content="Tetris Game">
+    <meta name="theme-color" content="#000000">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/game-controls.css">
+</head>
+<body class="body">
+<audio autoplay loop style="display: none;">
+    <source src="music/tetrisgra.wav" type="audio/mpeg">
+</audio>
+<main class="main" id="main_js">
+    <span id="p_cont"></span>
+    <span id="klocki"></span>
+    <span id="pauza" style="display: none;">I I</span>
+</main>
+
+<!-- Dodaj przyciski sterujące -->
+<div id="game-controls" style="position:fixed">
+    <button id="start-btn" onclick="startgame()">ROZPOCZNIJ</button>
+    <button id="restart-btn" style="display: none;">ROZPOCZNIJ PONOWNIE</button>
+</div>
+<script src="tutorial.js"></script>
+</body>
+</html>

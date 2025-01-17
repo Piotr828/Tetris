@@ -35,7 +35,8 @@ def hashowanie_hasla(password):
     return hash_object.hexdigest() #zwraca hasło jako ciąg znaków
 
 def ping_domena(domena):
-    return os.system(f"ping -c 1 {domena} > /dev/null 2>&1") == 0 #jesli zwraca 0 to znaczy ze domena istnieje
+    return True
+    # return os.system(f"ping -c 1 {domena} > /dev/null 2>&1") == 0 #jesli zwraca 0 to znaczy ze domena istnieje
 
 #sprawdzenie czy email zawiera jedna "@" i co najmniej jedna "." po "@"
 def is_valid_email(email):

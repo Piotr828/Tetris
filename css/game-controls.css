@@ -1,0 +1,9 @@
+#start-btn{
+    background-color: rgba(207, 152, 80, 0.0);
+    padding: 20px;
+    color:red;
+    border:none;
+    font-size: 30px;
+    font-weight: 5%;
+    cursor: pointer;
+}
