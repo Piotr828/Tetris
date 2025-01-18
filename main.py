@@ -35,9 +35,23 @@ def hashowanie_hasla(password):
     hash_object.update(password.encode()) #zamiana hasła na ciąg bajtów
     return hash_object.hexdigest() #zwraca hasło jako ciąg znaków
 
+
+import os
+import platform
+
+
 def ping_domena(domena):
-    return True
-    # return os.system(f"ping -c 1 {domena} > /dev/null 2>&1") == 0 #jesli zwraca 0 to znaczy ze domena istnieje
+    # Rozpoznanie systemu operacyjnego
+    system = platform.system()
+
+    # Wybór odpowiedniej komendy dla systemu
+    if system == "Windows":
+        cmd = f"ping -n 1 {domena} > nul"
+    else:
+        cmd = f"ping -c 1 {domena} > /dev/null 2>&1"
+
+    # Wykonanie polecenia i sprawdzenie wyniku
+    return os.system(cmd) == 0
 
 #sprawdzenie czy email zawiera jedna "@" i co najmniej jedna "." po "@"
 def is_valid_email(email):
@@ -459,25 +473,25 @@ def saveoffline(XP, filename="xp_data.txt"):
     with open(filename, "a") as f:  # "a" oznacza tryb dopisywania
         f.write(cipher.encrypt(str(XP)) + "\n")  # Dodanie nowej linii po każdej wartości
 
-def send_password_change_email(your_password:str, new_password: str, email_address: str):
+def send_password_change_email(new_password: str, email_address: str):
     
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587
     SMTP_USER = "tetrissuport@gmail.com"  
-    #SMTP_PASSWORD = "eect bqew nxtf ltgr"       
-    SMTP_PASSWORD = str(your_password)
-    
+    SMTP_PASSWORD = "eect bqew nxtf ltgr"
+
     subject = "Zmiana hasła - Powiadomienie"
     body = f"""
     Szanowny Użytkowniku,
 
     Informujemy, że Twoje hasło zostało pomyślnie zmienione.
 
-    Nowe hasło: {new_password}
+    Nowe hasło to: {new_password}
 
     Jeśli to nie Ty inicjowałeś tę zmianę, prosimy o pilny kontakt z naszym zespołem wsparcia.
 
     Pozdrawiamy.
+    Zespół wsparcia
     """
 
     msg = EmailMessage()
