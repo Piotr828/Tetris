@@ -10,7 +10,9 @@ function del(old){
                 if(result){document.getElementById('err').innerText = result}
                 else{
                     saveSessionData('login', null)
-                    document.location = 'log.html'}
+                    document.location = 'log.html'
+                    document.getElementById('err').innerText = ''
+                }
             })
             }
 
