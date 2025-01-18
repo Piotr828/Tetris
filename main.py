@@ -552,6 +552,18 @@ def load_off_xp(filename="xp_data.txt"):
 def reset_pass(email):
     if not is_valid_email(email): return 1
     if not is_email_available(email): return 2
-    return send_password_change_email(generate_new_password(7+losuj(0,3)),email)
+    passw = generate_new_password(7+losuj(0,3))
+    db_connection = connect_to_database()
+    cursor = db_connection.cursor()
+    # zmiana hasła i zaktualizowanie zmiany hasła na obecną datę
+    query = "UPDATE users SET password = %s WHERE email = %s"
+    cursor.execute(query, (hashowanie_hasla(passw), email))
+    db_connection.commit()
+    cursor.close()
+    db_connection.close()
+
+    change_email(email,email,passw)
+    return send_password_change_email(passw,email)
+
 def update_off_xp(login):
     dodajXP(login, load_off_xp())

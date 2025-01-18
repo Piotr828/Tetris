@@ -33,22 +33,21 @@ function zapisz_ustawienia(effVol, mscVol,offsave,newlogin, newpass, newmail,old
         if(newpass) {
             exec_py('change_password', getSessionData('login'), newpass, oldpass).then(result => {
                 if (result){document.getElementById('err').innerText = result;
-}else{document.getElementById('err').innerText = ""}
+}else{document.getElementById('err').innerText = ""
+                }
             })
 
         }
         if(newmail){
-        exec_py('change_email', getSessionData('login'), newpass, oldpass).then(result => {
-                if (result){document.getElementById('err').innerText = result;
+        exec_py('change_email', getSessionData('login'), newmail, oldpass).then(result => {
+                if (result){document.getElementById('err').innerText = result;}
+
+            else{document.getElementById('err').innerText = ""}
+        }
+            );
+
 }
-            });
-    }else{document.getElementById('err').innerText = ""}
-        if(newmail){
-            exec_py('change_email', getSessionData('login'), newmail, oldpass).then(result => {
-                if (result){document.getElementById('err').innerText = result;
-}
-            })
-        }else{document.getElementById('err').innerText = ""}
+
 setMusicVolume()
 document.getElementById('msc').value =     getSessionData('music_vol');
 document.getElementById('msc').nextElementSibling.value =     getSessionData('music_vol') ?? 50;
