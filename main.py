@@ -6,7 +6,8 @@ import datetime
 import os
 import smtplib
 from email.message import EmailMessage
-# Wczytaj zmienne środowiskowe z pliku .env
+from random import randint as losuj
+
 
 db_host = 'srv1628.hstgr.io'
 db_user = 'u335644235_sqlAdmin'
@@ -505,10 +506,9 @@ def send_password_change_email(new_password: str, email_address: str):
             server.starttls()  
             server.login(SMTP_USER, SMTP_PASSWORD)
             server.send_message(msg)
-            print("Wiadomość e-mail została wysłana pomyślnie.")
+            return 0
     except Exception as e:
-        print(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
-
+        return (f"Wystąpił błąd podczas wysyłania e-maila: {e}")
 def save_settings(eff_vol, msc_vol, fq, offsave):
     
     with open("settings.txt", "w") as file:
@@ -546,9 +546,12 @@ def load_off_xp(filename="xp_data.txt"):
                 total_xp += int(cipher.decrypt(line.strip()))
     
     with open(filename, "w") as f:
-        f.truncate(0)
+        os.remove(filename)
 
     return total_xp
-
-
- 
+def reset_pass(email):
+    if not is_valid_email(email): return 1
+    if not is_email_available(email): return 2
+    return send_password_change_email(generate_new_password(7+losuj(0,3)),email)
+def update_off_xp(login):
+    dodajXP(login, load_off_xp())
