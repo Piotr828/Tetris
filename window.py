@@ -12,5 +12,5 @@ class API:
 
 api_instance = API()
 
-webview.create_window('Tetris', 'index.html', js_api=api_instance, min_size=(325,655))
+webview.create_window('Tetris', 'index.html', width=900, height=625, js_api=api_instance, min_size=(325,655))
 webview.start(debug=True)
