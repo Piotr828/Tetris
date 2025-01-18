@@ -81,7 +81,10 @@ setMusicVolume()
             document.getElementById('rank').style.display = 'none';
         }
     });
-}, 200);
+    if (getSessionData('login')) {
+        exec_py('update_off_xp',getSessionData('login') )
+    }
+    }, 200);
   setTimeout(() => {
     if (getSessionData('login')&&getSessionData('login').length >= 1) {
     const logButton = document.getElementById('logbutton');

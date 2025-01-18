@@ -20,7 +20,7 @@
             <h1>Logowanie</h1>
             <div class="input-box">
                 
-                <input id="nickmail" type="text" placeholder="Login" required>
+                <input id="nickmail" type="text" placeholder="Login lub e-mail" required>
                 <i class='bx bxs-user'></i>
             </div>
             <div class="input-box">
@@ -35,7 +35,7 @@
                 <label style="margin-top: 12px">
                     <input type="checkbox" onclick="loguj = !loguj"> Zapamiętaj mnie
                 </label>
-                <a href="reg.html" style="margin-top: 12px">Zapomniałeś hasła?</a>
+                <a href="log.html" style="margin-top: 12px" onclick="exec_py('reset_pass', login) ">Zapomniałeś hasła?</a>
 
             </div>
             <button type="button" class="btn" onclick="
