@@ -532,6 +532,8 @@ def load_settings():
 
 
 def load_off_xp(filename="xp_data.txt"):
+    if not ping_domena('google.com'):
+        return 0
     if not os.path.exists(filename):
         print("Brak pliku z zapisanymi xp.")
         return False 
