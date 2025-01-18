@@ -1,6 +1,7 @@
 body {
-    background: url('../images/settings_bg4.png') no-repeat;
-    margin-top: 20px;
+    background: url('../images/settings_bg4.png') no-repeat bottom;
+    background-size: cover;
+    margin-top: 20px;min-height: 100vh;
 }
 
 .ui-w-80 {
