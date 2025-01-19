@@ -125,7 +125,7 @@ function setMusicVolume() {
     const musicVol = getSessionData('music_vol'); // Pobranie wartości z funkcji
 
     // Sprawdzenie, czy wartość jest `null` lub `undefined`, jeśli tak, ustaw na 50%, inaczej na pobraną wartość
-    const volume = musicVol ?? 20;
+    const volume = musicVol ?? 50;
 
     // Znalezienie pierwszego elementu audio na stronie i ustawienie głośności
     const musicElement = document.querySelector('audio');
