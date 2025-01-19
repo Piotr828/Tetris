@@ -1,4 +1,4 @@
-if (getSessionData('login') == null){document.getElementById('acc').style.display='none'}
+if (getSessionData('login') == null || !getSessionData('login')){document.getElementById('acc').style.display='none'}
 function del(old){
     let dane = false
     exec_py('log',getSessionData('login'),old).then(result => {
@@ -21,6 +21,8 @@ function del(old){
 
 let off = !!getSessionData('offsave')
 function zapisz_ustawienia(effVol, mscVol,offsave,newlogin, newpass, newmail,oldpass){
+    exec_py('save_settings',effVol, mscVol, "", offsave-0)
+    // save_settings(eff_vol, msc_vol, fq, offsave):
     saveSessionData('eff_vol', effVol-0);
     saveSessionData('music_vol',mscVol-0);
     saveSessionData('offsave',offsave);

@@ -224,25 +224,32 @@ function dodajXP(XP){
 //Sztuczne logowanie
 function game_over(){
     let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
+    exec_py('czy_rekord', getSessionData('login'),punkty).then(result => {
+        if(result){
+            punkty = punkty + 8;
+            document.getElementById('rec').innerHTML = '<strong>Rekord!</strong>';
+        }
+    })
     exec_py('ping_domena','google.pl').then(result => {
         if(!result && getSessionData('offsave')){
             exec_py('saveoffline',punkty)
         }
     });
-    exec_py('dodajXP', getSessionData('login'),punkty)
+    exec_py('dodajXP', getSessionData('login'),punkty).then(
 document.body.innerHTML = `
 </head>
 <body>
     <div class="alert summary-alert">
         <center><div class="summary-title">Koniec gry!</div></center>
         <span><strong>Usunięte wiersze:</strong> ${usuniete}</span>
-        <span><strong>Punkty:</strong> ${punkty} </span>
+        <span><strong>Punkty:</strong> ${punkty} </span><br>
+        <span id="rec"><strong></strong></span>
         <div class="buttons">
             <button class="menu-button" onclick="window.location='index.html'">Powrót do menu</button>
             <button class="play-button" onclick="window.location.reload();">Zagraj ponownie</button>
         </div>
     </div>
-`
+`)
 }
 // system pauzy
 document.addEventListener('keydown', (event) => {

@@ -3,7 +3,6 @@ import mysql.connector
 import string
 import random
 import datetime
-import os
 import smtplib
 from email.message import EmailMessage
 from random import randint as losuj
@@ -196,33 +195,32 @@ def log(identifier,password):
     except mysql.connector.Error:
         return "Błąd bazy danych."
         
-def save(login,xp):
+def save(login, xp):
+    print("Zapisuję dane do bazy danych...")
     try:
         db_connection = connect_to_database()
         cursor = db_connection.cursor()
-        #sprawdzenie czy użytkownik o tej nazwie istnieje w bazie danych
-        cursor.execute("SELECT COUNT(*), best_score FROM users WHERE login = %s", (login,))
-        result = cursor.fetchone()
-        if result[0]==0:
-            cursor.close()
-            db_connection.close()
-            return "Użytkownik o podanej nazwie nie istnieje"
-        #aktualizacja xp
-        best_score=result[1]
-        if xp> best_score:
-            query = "UPDATE users SET xp = %s, best_score = %s WHERE login = %s"
-            cursor.execute(query,(xp,xp,login))
-        else:
-            query = "UPDATE users SET xp = %s WHERE login = %s"
-            cursor.execute(query,(xp,login))
+
+        # Aktualizacja xp niezależnie od wartości best_score
+        query_update_xp = "UPDATE users SET xp = %s WHERE login = %s"
+        cursor.execute(query_update_xp, (xp, login))
+
+        # Aktualizacja best_score tylko jeśli czy_rekord zwróci True
+        if czy_rekord(xp, login):  # xp i login w odpowiedniej kolejności
+            query_update_best_score = "UPDATE users SET best_score = %s WHERE login = %s"
+            cursor.execute(query_update_best_score, (xp-8, login))
+
         db_connection.commit()
         cursor.close()
         db_connection.close()
+        print("Zapisano dane do bazy danych.")
         return 0
-    except mysql.connector.Error:
+
+    except mysql.connector.Error as e:
+        print(f"Błąd bazy danych: {e}")
         return "Błąd bazy danych."
 
-#pobranie xp użytkownika z bazy
+
 def loadxp(login):
     try:
         db_connection = connect_to_database()
@@ -271,37 +269,10 @@ def generate_new_password(length=5): #na wstępie ustalamy długość 5 aby był
     password = ''.join(random.sample(password, len(password)))
     return password
 
-def reset_password(email):
-    try:
-        db_connection = connect_to_database()
-        cursor = db_connection.cursor()
-        #sprawdzenie czy email jest w bazie danych
-        query = "SELECT last_password_change FROM users WHERE email = %s"
-        cursor.execute(query,(email,))
-        result = cursor.fetchone()
-        if not result:
-            return "Podany email nie jest zarejestrowany."
-        last_change=result[0]
-        now =datetime.now()
-        #sprawdzenie czy od ostatniej zmiany hasła minęło 30 dni od czasu obecnego
-        if (now-last_change).total_seconds()<2592000:
-            return "Hasło można zmienić tylko raz na 30 dni"
-
-        else:
-            new_password=generate_new_password()
-            hashed_password= hashowanie_hasla(new_password)
-            #dodanie nowego zahashowanego hasła do bazy danych przy podanym emailu oraz obecnej daty przy ostatniej zmianie hasła
-            update_query= "UPDATE users SET password = %s, last_password_change = %s WHERE email = %s"
-            cursor.execute(update_query,(hashed_password,now,email))
-            db_connection.commit()
-            cursor.close()
-            db_connection.close()
-            return 0
-    except mysql.connector.Error:
-        return "Błąd bazy danych"
 def dodajXP(login, XP):
-    obecne = loadxp(login)
-    obecne += XP
+    obecne = int(loadxp(login))
+    obecne += int(XP)
+    print(">>> Dodajemy ",XP," do ",login,"")
     return save(login,obecne)
 
 def change_password(login, new_password, password):
@@ -364,6 +335,8 @@ def change_email(login,new_email, password):
         return "Nowy adres e-mail jest nieprawidłowy."
     if not is_email_available(new_email):
         return "Nowy adres e-mail jest już zajęty."
+    if not ping_domena(new_email.split("@")[-1]):
+        return "Adres e-mail nie istnieje"
     try:
         db_connection=connect_to_database()
         cursor=db_connection.cursor()
@@ -509,6 +482,38 @@ def send_password_change_email(new_password: str, email_address: str):
             return 0
     except Exception as e:
         return (f"Wystąpił błąd podczas wysyłania e-maila: {e}")
+
+
+def verify_mail(code: str, email_address: str):
+    SMTP_SERVER = "smtp.gmail.com"
+    SMTP_PORT = 587
+    SMTP_USER = "tetrissuport@gmail.com"
+    SMTP_PASSWORD = "eect bqew nxtf ltgr"
+
+    subject = "Weryfikacja - Tetris"
+    body = f"""
+    Szanowny Użytkowniku,
+
+    Kod to: {code}
+
+    """
+
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = SMTP_USER
+    msg["To"] = email_address
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(msg)
+            return 0
+    except Exception as e:
+        return (f"Wystąpił błąd podczas wysyłania e-maila: {e}")
+
+
 def save_settings(eff_vol, msc_vol, fq, offsave):
     
     with open("settings.txt", "w") as file:
@@ -518,25 +523,25 @@ def save_settings(eff_vol, msc_vol, fq, offsave):
         file.write(f"{offsave}\n")
 
 def load_settings():
-    
     try:
         with open("settings.txt", "r") as file:
             lines = file.readlines()
-        return [int(line.strip()) for line in lines] 
+        # Spróbuj przekonwertować każdą linię na liczbę całkowitą
+        return [int(line.strip()) for line in lines if line.strip()]
     except FileNotFoundError:
-        print("Plik ustawień nie został znaleziony.")
+        print("Plik settings.txt nie istnieje.")
         return []
     except ValueError:
-        print("Plik ustawień zawiera błędne dane.")
+        print("Plik zawiera nieprawidłowe dane.")
         return []
+
 
 
 def load_off_xp(filename="xp_data.txt"):
     if not ping_domena('google.com'):
         return 0
     if not os.path.exists(filename):
-        print("Brak pliku z zapisanymi xp.")
-        return False 
+        return False
     
     total_xp = 0
     with open(filename, "r") as f:
@@ -549,21 +554,79 @@ def load_off_xp(filename="xp_data.txt"):
         os.remove(filename)
 
     return total_xp
-def reset_pass(email):
-    if not is_valid_email(email): return 1
-    if not is_email_available(email): return 2
-    passw = generate_new_password(7+losuj(0,3))
-    db_connection = connect_to_database()
-    cursor = db_connection.cursor()
-    # zmiana hasła i zaktualizowanie zmiany hasła na obecną datę
-    query = "UPDATE users SET password = %s WHERE email = %s"
-    cursor.execute(query, (hashowanie_hasla(passw), email))
-    db_connection.commit()
-    cursor.close()
-    db_connection.close()
 
-    change_email(email,email,passw)
-    return send_password_change_email(passw,email)
+
+def reset_password(email):
+    try:
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+        #sprawdzenie czy email jest w bazie danych
+        query = "SELECT last_password_change FROM users WHERE email = %s"
+        cursor.execute(query,(email,))
+        result = cursor.fetchone()
+        if not result:
+            return "Podany email nie jest zarejestrowany."
+        last_change=result[0]
+        now =datetime.datetime.now()
+        #sprawdzenie czy od ostatniej zmiany hasła minęło 30 dni od czasu obecnego
+        if (now-last_change).total_seconds()<2592000:
+            return "Hasło można zmienić tylko raz na 30 dni"
+
+        else:
+            new_password=generate_new_password(7+losuj(0,3))
+            hashed_password= hashowanie_hasla(new_password)
+            #dodanie nowego zahashowanego hasła do bazy danych przy podanym emailu oraz obecnej daty przy ostatniej zmianie hasła
+            update_query= "UPDATE users SET password = %s, last_password_change = %s WHERE email = %s"
+            cursor.execute(update_query,(hashed_password,now,email))
+            db_connection.commit()
+            cursor.close()
+            db_connection.close()
+            return send_password_change_email(new_password, email)
+            return 0
+    except mysql.connector.Error:
+        return "Błąd bazy danych"
 
 def update_off_xp(login):
     dodajXP(login, load_off_xp())
+
+def czy_rekord(login: str, xp: int) -> bool:
+    print("Czy rekord?")
+    try:
+        # Połączenie z bazą danych
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+
+        # Zapytanie SQL sprawdzające wartość best_score dla danego loginu
+        query = "SELECT best_score FROM users WHERE login = %s"
+        cursor.execute(query, (login,))
+        result = cursor.fetchone()
+
+        # Jeśli nie znaleziono wiersza, zwróć False
+        if not result:
+            cursor.close()
+            db_connection.close()
+            return False
+
+        # Pobierz wartość best_score
+        best_score = result[0]
+
+        # Porównanie xp z best_score
+        if xp > best_score:
+            # Aktualizacja best_score w bazie danych
+            update_query = "UPDATE users SET best_score = %s WHERE login = %s"
+            cursor.execute(update_query, (xp, login))
+            db_connection.commit()
+
+            # Zamknij połączenie i zwróć True
+            cursor.close()
+            db_connection.close()
+            return True
+
+        # Jeśli xp nie jest większe, zwróć False
+        cursor.close()
+        db_connection.close()
+        return False
+
+    except mysql.connector.Error as e:
+        print(f"Błąd bazy danych: {e}")
+        return False

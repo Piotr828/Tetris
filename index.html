@@ -75,6 +75,11 @@
 
 setMusicVolume()
     setTimeout(() => {
+        exec_py('load_settings').then(result => {
+            saveSessionData('eff_vol', result[0]-0);
+            saveSessionData('music_vol',result[1]-0);
+            saveSessionData('offsave',result[2]-0);
+        })
     exec_py('ping_domena', 'google.com').then(result => {
         if (!result) {
             document.getElementById('logbutton').style.display = 'none';
