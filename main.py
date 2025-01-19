@@ -102,29 +102,32 @@ def is_login_available(login):
             return True
     except mysql.connector.Error:
         return Exception("Błąd bazy danych.")
-        
+
+
 def is_email_available(email):
     try:
-        db_connection=connect_to_database()
-        cursor=db_connection.cursor()
-        query="SELECT COUNT(*) FORM users WHERE LOWER(email) = LOWER(%s);"
-        cursor.execute(query,(email,))
-        result=cursor.fetchone()
+        # łączenie z bazą danych
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+        query = "SELECT COUNT(*) FROM users WHERE LOWER(email) = LOWER(%s);"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
         cursor.close()
         db_connection.close()
-        if result[0]>0: #gdy wynik jest inny niz 0 to email jest juz zajety
+        if result[0] > 0:  # jeśli jest jakiś wynik inny niż 0 to znaczy że już jest zajęty
             return False
         else:
             return True
     except mysql.connector.Error:
-        return "Błąd bazy danych"
+        print("Baza danych umarła")
+        return "Błąd bazy danych."
 
 def register(login,password,email):
     # sprawdzenie poprawnosci maila
     domena=email.split("@")[-1]
 
     if not is_email_available(email):
-        return "Użytkownik o podanym adresie email jest już zarejestrowany."
+        return "Adres e-mail jest zajęty."
 
     if not is_valid_email(email):
         return "Nieprawidłowy adres e-mail."
@@ -274,6 +277,33 @@ def dodajXP(login, XP):
     obecne += int(XP)
     print(">>> Dodajemy ",XP," do ",login,"")
     return save(login,obecne)
+
+
+def change_password_force(email, new_password):
+    # sprawdzenie poprawności hasła
+    if not is_valid_password(new_password):
+        return "Hasło musi zawierać minimum 5 znaków, jedną małą i jedną dużą literę oraz jedną cyfrę."
+
+    hashed_password = hashowanie_hasla(new_password)
+    try:
+        db_connection = connect_to_database()
+        cursor = db_connection.cursor()
+
+        # sprawdzenie czy użytkownik istnieje i sprawdzenie daty ostatniej zmiany hasłą
+        query = "SELECT last_password_change FROM users WHERE email = %s"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        # zmiana hasła i zaktualizowanie zmiany hasła na obecną datę
+        query = "UPDATE users SET password = %s WHERE email = %s"
+        cursor.execute(query, (hashed_password, email))
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return 0
+    except mysql.connector.Error:
+        return "Błąd bazy danych."
+
 
 def change_password(login, new_password, password):
     if log(login, password) != 0:
@@ -485,6 +515,9 @@ def send_password_change_email(new_password: str, email_address: str):
 
 
 def verify_mail(code: str, email_address: str):
+    if not is_valid_email(email_address) or is_email_available(email_address) :
+        print(is_valid_email(email_address), is_email_available(email_address))
+        return 1
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587
     SMTP_USER = "tetrissuport@gmail.com"

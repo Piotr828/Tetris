@@ -1,0 +1,5 @@
+body{
+    background: url('../images/log_background.png') no-repeat bottom;
+    background-size: cover;
+    margin-top: 20px;min-height: 100vh;
+}
