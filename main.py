@@ -526,9 +526,16 @@ def verify_mail(code: str, email_address: str):
     subject = "Weryfikacja - Tetris"
     body = f"""
     Szanowny Użytkowniku,
-
-    Kod to: {code}
-
+    Oto Twój kod weryfikacyjny:
+    {code}
+    Użyj tego kodu, aby zweryfikować swoją tożsamość. 
+    Jeśli to nie Ty inicjowałeś/aś tę prośbę, prosimy zignorować tę wiadomość.
+    Jeżeli masz jakiekolwiek pytania lub potrzebujesz dodatkowej pomocy, nie wahaj się z nami skontaktować. 
+    Jesteśmy tutaj, aby Ci pomóc.
+    
+    Z pozdrowieniami,
+    Zespół Wsparcia Tetris
+    
     """
 
     msg = EmailMessage()
