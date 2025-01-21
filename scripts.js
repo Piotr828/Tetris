@@ -56,6 +56,7 @@ let intervalId = null;
 let paused = false
 // dodaje klocek na plansze, iterujr przez jego macież i dla każdej 1 dodaje do planszy kolor klocka
 function dodajKlocekNaPlansze() {
+            playSound('polozeniebloku.mp3', getSessionData('eff_vol'));
     const { dane, pozycja, kolor } = aktualnyKlocek;
     const [startRow, startCol] = pozycja;
 
@@ -71,9 +72,15 @@ function dodajKlocekNaPlansze() {
         }
     }
 }
-
+let tempo
 // funkcja usuwajaca pelne wiersze
 function usunPelneWiersze() {
+     tempo = 500/(1+usuniete*0)
+        clearInterval(intervalId);
+    intervalId = setInterval(() => { // uruchamia cyklicznie funkcje
+        przesunKlocek('down');
+        rysujPlansze();
+    }, tempo)
     const nowePlansza = plansza.filter(row => row.includes(0)); // zmiennna przechowujaca niepelne wiersze
     const liczbaUsunietych = plansza.length - nowePlansza.length;
 
@@ -83,11 +90,13 @@ function usunPelneWiersze() {
 
     if (liczbaUsunietych > 0) {
         usuniete += liczbaUsunietych;
-        playSound('tetris_pop.wav', getSessionData('eff_vol'));
         let punktacja = kolory[Math.floor(Math.random()*7)]
         if (punktacja == 'blue2'){punktacja = 'cyan'}
         document.getElementById('deld').style.color = punktacja
         document.getElementById('deld').innerHTML = usuniete
+
+            playSound("tetris_pop.wav", getSessionData('eff_vol'))
+
 
 
 }
@@ -177,7 +186,6 @@ function obrocKlocek() {
 
 // wybiera losowy klocek i ustawia go na górze
 function nowyKlocek() {
-    usunPelneWiersze()
           if (plansza[0].some(function(x){return !!x})) { // jezeli ma kolizje na poczatku planszy, czyli jak przgrywamy
             clearInterval(intervalId); // to konczy gre
             game_over();
@@ -192,7 +200,7 @@ function nowyKlocek() {
                stopped = 0;
                document.getElementById('klocki').style.display = 'inline-block'
                           document.getElementById('pauza').style.display = 'none'
-
+usunPelneWiersze()
     const typKlocka = Math.ceil(Math.random() * 7);
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
@@ -203,11 +211,8 @@ function nowyKlocek() {
 
 function startgame(){
     nowyKlocek();// losuje klocek
-
-    intervalId = setInterval(() => { // uruchamia cyklicznie funkcje
-        przesunKlocek('down');
-        rysujPlansze();
-    }, 500/(1+usuniete*0.2)); // zmiana czasu spadania wraz z poziomem gry (mozna zwiekszyc)
+clearInterval()
+  // zmiana czasu spadania wraz z poziomem gry (mozna zwiekszyc)
 
     document.addEventListener('keydown', (event) => {
         if (!stopped) {

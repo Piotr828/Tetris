@@ -42,7 +42,6 @@ const klocki = {
         [1, 0, 0, 0]
     ]
 };
-let stopped = 0
 // zmienna przechowująca liczbę usuniętych wierszy; potrzebna do liczenia XP oraz prędkości upadku
 let usuniete = 0;
 const kolory = ['blue','green','orange','purple','yellow','red','blue2'];
@@ -56,7 +55,7 @@ let intervalId = null;
 let paused = false
 // dodaje klocek na plansze, iterujr przez jego macież i dla każdej 1 dodaje do planszy kolor klocka
 function dodajKlocekNaPlansze() {
-    playSound("add.wav", volume = 50)
+    playSound('polozeniebloku.mp3', getSessionData('eff_vol'));
     const { dane, pozycja, kolor } = aktualnyKlocek;
     const [startRow, startCol] = pozycja;
 
@@ -84,7 +83,8 @@ function usunPelneWiersze() {
     }
 
     usuniete += liczbaUsunietych;
-    if (liczbaUsunietych > 0) {    playSound('tetris_pop.wav', getSessionData('eff_vol'))
+    if (liczbaUsunietych > 0) {
+            playSound("tetris_pop.wav", getSessionData('eff_vol'))
 }
     document.getElementById('deld').innerHTML = usuniete// dodajemy wartość usuniętych do naszej głównej zmiennnej usuniete
     plansza = nowePlansza; // zmiana planszy na nowa bez pełnyh wierszy
@@ -144,10 +144,10 @@ function przesunKlocek(kierunek) {
     const { dane, pozycja } = aktualnyKlocek;
     let [startRow, startCol] = pozycja;
 
-    if (kierunek === 'down') startRow++;
-    else if (kierunek === 'left') startCol--;
-    else if (kierunek === 'right') startCol++;
-    else if (kierunek === 'drop') while (!czyKolizja(dane, [startRow+1, startCol])){
+    if (kierunek === 'down' && !paused) startRow++;
+    else if (kierunek === 'left' && !paused) startCol--;
+    else if (kierunek === 'right' && !paused) startCol++;
+    else if (kierunek === 'drop' && !paused) while (!czyKolizja(dane, [startRow+1, startCol])){
     startRow++;
     };
 
@@ -178,13 +178,7 @@ function nowyKlocek() {
             game_over();
             //window.location = 'index.html'
         }
-           if(paused){stopped = 1;
-           document.getElementById('klocki').style.display = 'none'
-                          document.getElementById('pauza').style.display = 'block'
 
-           }
-           else{
-               stopped = 0;
                document.getElementById('klocki').style.display = 'inline-block'
                           document.getElementById('pauza').style.display = 'none'
 
@@ -194,7 +188,7 @@ function nowyKlocek() {
         pozycja: [-4, Math.floor(columns / 2) - 2], // startowa pozycja
         kolor: kolory[typKlocka - 1] // (tutaj można zmienić żeby kolor był random)
     };
-}}
+}
 
 function startgame(){
     nowyKlocek();// losuje klocek
@@ -202,17 +196,17 @@ function startgame(){
     intervalId = setInterval(() => { // uruchamia cyklicznie funkcje
         przesunKlocek('down');
         rysujPlansze();
-    }, 500); // zmiana czasu spadania wraz z poziomem gry (mozna zwiekszyc)
+    }, 500);
 
     document.addEventListener('keydown', (event) => {
-        if (!stopped) {
+
             if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
             else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
             else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
             else if (event.key === 'ArrowUp' || event.key === 'w') przesunKlocek('drop');
             else if (event.key === ' ' || event.key === 'r') obrocKlocek();
             rysujPlansze();
-        }});
+        });
 
 }
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
@@ -220,13 +214,6 @@ function putpixel(color,x,y){
     document.getElementById("klocki").innerHTML += `<img alt = 'Error' src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
 }
 
-function dodajXP(XP){
-    if (getSessionData('login')){
-    exec_py('dodajXP', getSessionData('login'), XP).then(result => { console.log(result); });
-
-    }
-}
-//Sztuczne logowanie
 function game_over(){
         let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
 
@@ -249,8 +236,5 @@ document.body.innerHTML = `
 document.addEventListener('keydown', (event) => {
     if (event.key === 'p' || event.key === 'P'){
 paused = !paused
-    if (stopped && paused){
-        stopped = !stopped
-    }}
-});
+}})
 setMusicVolume()

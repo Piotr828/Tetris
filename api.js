@@ -67,13 +67,6 @@ function reloadCSS() {
     }
 
 
-
-
-
-
-
-
-
 });
 
 // Wywołanie event listenera na start (aby sprawdzić aktualny stan okna)

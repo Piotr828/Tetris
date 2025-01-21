@@ -4,21 +4,21 @@ body{
     margin-top: 20px;min-height: 100vh;
 }
 
-input[type=text]{
+input{
     
-    background: white;
-    border: none;
+    border: solid 2px black;
     outline: none;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid white;
     border-radius: 40px;
-    font-size: 16px;
-    color: black;
+    font-size: 18px;
+    color: white;
     padding: 20px 45px 20px 20px;
+    background-color: transparent;
 }
 
 #login{
     
-    height: 45px;
+    height: 35px;
     background: white;
     border: none;
     outline: none;
