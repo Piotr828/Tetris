@@ -4,7 +4,7 @@ body{
     margin-top: 20px;min-height: 100vh;
 }
 
-input{
+input[type=text]{
     
     background: white;
     border: none;
@@ -12,7 +12,7 @@ input{
     border: 2px solid rgb(0, 0, 0);
     border-radius: 40px;
     font-size: 16px;
-    color: #fff;
+    color: black;
     padding: 20px 45px 20px 20px;
 }
 

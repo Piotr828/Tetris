@@ -81,7 +81,17 @@ function usunPelneWiersze() {
         nowePlansza.unshift(Array(columns).fill(0));
     }
 
-    usuniete += liczbaUsunietych; // dodajemy wartość usuniętych do naszej głównej zmiennnej usuniete
+    if (liczbaUsunietych > 0) {
+        usuniete += liczbaUsunietych;
+        playSound('tetris_pop.wav', getSessionData('eff_vol'));
+        let punktacja = kolory[Math.floor(Math.random()*7)]
+        if (punktacja == 'blue2'){punktacja = 'cyan'}
+        document.getElementById('deld').style.color = punktacja
+        document.getElementById('deld').innerHTML = usuniete
+
+
+}
+    // dodajemy wartość usuniętych do naszej głównej zmiennnej usuniete
     plansza = nowePlansza; // zmiana planszy na nowa bez pełnyh wierszy
 }
 
@@ -150,7 +160,6 @@ function przesunKlocek(kierunek) {
         aktualnyKlocek.pozycja = [startRow, startCol]; // jesli nie ma kolizji zmienia jego pozycje
     } else if (kierunek === 'down') { // jesli jest kolizja przy ruchu w dół
         dodajKlocekNaPlansze(); // dodaje go na plansze
-        usunPelneWiersze(); // usuwa pelne wiersze
         nowyKlocek(); // generuje nowy klocekl
 
     }
@@ -168,6 +177,7 @@ function obrocKlocek() {
 
 // wybiera losowy klocek i ustawia go na górze
 function nowyKlocek() {
+    usunPelneWiersze()
           if (plansza[0].some(function(x){return !!x})) { // jezeli ma kolizje na poczatku planszy, czyli jak przgrywamy
             clearInterval(intervalId); // to konczy gre
             game_over();
@@ -187,7 +197,7 @@ function nowyKlocek() {
     aktualnyKlocek = {
         dane: klocki[`klocek${typKlocka}`],
         pozycja: [-4, Math.floor(columns / 2) - 2], // startowa pozycja
-        kolor: kolory[typKlocka - 1] // (tutaj można zmienić żeby kolor był random)
+        kolor: kolory[Math.floor(Math.random()*7)] // (tutaj można zmienić żeby kolor był random)
     };
 }}
 
@@ -205,7 +215,8 @@ function startgame(){
             else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
             else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
             else if (event.key === 'ArrowUp' || event.key === 'w') przesunKlocek('drop');
-            else if (event.key === ' ' || event.key === 'r') obrocKlocek();
+            else if ((event.key === ' ' || event.key === 'r') && aktualnyKlocek['dane'] != klocki['klocek5'])
+                obrocKlocek();
             rysujPlansze();
         }});
 

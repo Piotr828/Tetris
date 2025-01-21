@@ -56,6 +56,7 @@ let intervalId = null;
 let paused = false
 // dodaje klocek na plansze, iterujr przez jego macież i dla każdej 1 dodaje do planszy kolor klocka
 function dodajKlocekNaPlansze() {
+    playSound("add.wav", volume = 50)
     const { dane, pozycja, kolor } = aktualnyKlocek;
     const [startRow, startCol] = pozycja;
 
@@ -74,6 +75,7 @@ function dodajKlocekNaPlansze() {
 
 // funkcja usuwajaca pelne wiersze
 function usunPelneWiersze() {
+
     const nowePlansza = plansza.filter(row => row.includes(0)); // zmiennna przechowujaca niepelne wiersze
     const liczbaUsunietych = plansza.length - nowePlansza.length;
 
@@ -81,7 +83,10 @@ function usunPelneWiersze() {
         nowePlansza.unshift(Array(columns).fill(0));
     }
 
-    usuniete += liczbaUsunietych; // dodajemy wartość usuniętych do naszej głównej zmiennnej usuniete
+    usuniete += liczbaUsunietych;
+    if (liczbaUsunietych > 0) {    playSound('tetris_pop.wav', getSessionData('eff_vol'))
+}
+    document.getElementById('deld').innerHTML = usuniete// dodajemy wartość usuniętych do naszej głównej zmiennnej usuniete
     plansza = nowePlansza; // zmiana planszy na nowa bez pełnyh wierszy
 }
 
@@ -142,11 +147,14 @@ function przesunKlocek(kierunek) {
     if (kierunek === 'down') startRow++;
     else if (kierunek === 'left') startCol--;
     else if (kierunek === 'right') startCol++;
+    else if (kierunek === 'drop') while (!czyKolizja(dane, [startRow+1, startCol])){
+    startRow++;
+    };
 
     if (!czyKolizja(dane, [startRow, startCol])) {
         aktualnyKlocek.pozycja = [startRow, startCol]; // jesli nie ma kolizji zmienia jego pozycje
     } else if (kierunek === 'down') { // jesli jest kolizja przy ruchu w dół
-        dodajKlocekNaPlansze(); // dodaje go na plansze
+        dodajKlocekNaPlansze();// dodaje go na plansze
         usunPelneWiersze(); // usuwa pelne wiersze
         nowyKlocek(); // generuje nowy klocekl
 
@@ -188,59 +196,25 @@ function nowyKlocek() {
     };
 }}
 
-let gameStarted = false; // flaga do kontroli stanu gry
+function startgame(){
+    nowyKlocek();// losuje klocek
 
-
-// funkcja startująca grę
-function startGame() {
-    if (gameStarted) return; // Jeśli gra już działa, ignoruj
-    gameStarted = true;
-
-    // ukryj przycisk "ROZPOCZNIJ" i pokaż planszę
-    document.getElementById('start-btn').style.display = 'none';
-    document.getElementById('restart-btn').style.display = 'none';
-    document.getElementById('klocki').style.display = 'block';
-
-    // zainicjuj pierwszy klocek i rozpocznij grę
-    nowyKlocek();
-    intervalId = setInterval(() => {
+    intervalId = setInterval(() => { // uruchamia cyklicznie funkcje
         przesunKlocek('down');
         rysujPlansze();
-    }, 1000); // czas spadania klocków
+    }, 500); // zmiana czasu spadania wraz z poziomem gry (mozna zwiekszyc)
+
+    document.addEventListener('keydown', (event) => {
+        if (!stopped) {
+            if (event.key === 'ArrowLeft' || event.key === 'a') przesunKlocek('left');
+            else if (event.key === 'ArrowRight' || event.key === 'd') przesunKlocek('right');
+            else if (event.key === 'ArrowDown' || event.key === 's') przesunKlocek('down');
+            else if (event.key === 'ArrowUp' || event.key === 'w') przesunKlocek('drop');
+            else if (event.key === ' ' || event.key === 'r') obrocKlocek();
+            rysujPlansze();
+        }});
+
 }
-
-// funkcja restartująca grę
-function restartGame() {
-    clearInterval(intervalId); // zatrzymaj bieżący interwał
-    plansza = Array.from({ length: rows }, () => Array(columns).fill(0)); // wyczyść planszę
-    usuniete = 0; // zresetuj licznik usuniętych wierszy
-    gameStarted = false; // zresetuj flagę gry
-    rysujPlansze(); // wyczyść ekran
-
-    // pokaż przycisk startu
-    document.getElementById('restart-btn').style.display = 'none';
-    document.getElementById('start-btn').style.display = 'inline-block';
-}
-
-// funkcja kończąca grę
-function game_over() {
-    clearInterval(intervalId); // zatrzymaj interwał
-    gameStarted = false; // zresetuj flagę gry
-    let punkty = Math.ceil(5 * usuniete + 6 * Math.sqrt(usuniete));
-
-    // wyświetl komunikat końca gry i pokaż przycisk restartu
-    alert(`Koniec gry! Usunięte wiersze: ${usuniete}, Punkty: ${punkty}`);
-    document.getElementById('restart-btn').style.display = 'inline-block';
-    document.getElementById('start-btn').style.display = 'none';
-}
-
-// podłącz zdarzenia do przycisków
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('start-btn').addEventListener('click', startGame);
-    document.getElementById('restart-btn').addEventListener('click', restartGame);
-});
-
-
 // funkcja uzupełnia jedno pole planszy. Teraz łatwo można stworzyć funkcję rebuild(), która zbuduje wygląd planszy na podstawie zawartości tablicy plansza
 function putpixel(color,x,y){
     document.getElementById("klocki").innerHTML += `<img alt = 'Error' src="images/square_${color}.png" style="width: 5vh; left: calc(${(x)*5}vh + 50vw - 25vh); z-index: 2; position: fixed; bottom: ${y*5-5}vh" />`
@@ -254,15 +228,16 @@ function dodajXP(XP){
 }
 //Sztuczne logowanie
 function game_over(){
-    let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
-    exec_py('dodajXP', getSessionData('login'),punkty)
+        let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
+
 document.body.innerHTML = `
 </head>
 <body>
     <div class="alert summary-alert">
         <center><div class="summary-title">Koniec gry!</div></center>
         <span><strong>Usunięte wiersze:</strong> ${usuniete}</span>
-        <span><strong>Punkty:</strong> ${punkty} </span>
+        <span><strong>Punkty:</strong> ${punkty} </span><br>
+        <span id="rec"><strong></strong></span>
         <div class="buttons">
             <button class="menu-button" onclick="window.location='index.html'">Powrót do menu</button>
             <button class="play-button" onclick="window.location.reload();">Zagraj ponownie</button>
