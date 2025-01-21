@@ -6,30 +6,6 @@ import datetime
 import smtplib
 from email.message import EmailMessage
 from random import randint as losuj
-import os
-
-# Pobranie danych z zmiennych środowiskowych
-db_host = os.getenv('DB_HOST')
-db_user = os.getenv('DB_USER')
-db_password = os.getenv('DB_PASS')
-db_name = os.getenv('DB_NAME')
-
-# Weryfikacja, czy wszystkie zmienne są ustawione
-print([db_host, db_user, db_password, db_name])
-
-# Kod do połączenia z bazą danych
-import mysql.connector
-
-try:
-    connection = mysql.connector.connect(
-        host=db_host,
-        user=db_user,
-        password=db_password,
-        database=db_name
-    )
-    print("Połączono z bazą danych")
-except mysql.connector.Error as e:
-    print(f"Błąd podczas połączenia z bazą danych: {e}")
 
 def close():
     os._exit(0)
@@ -500,7 +476,6 @@ def send_password_change_email(new_password: str, email_address: str):
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587
     SMTP_USER = "tetrissuport@gmail.com"  
-    SMTP_PASSWORD = "eect bqew nxtf ltgr"
 
     subject = "Zmiana hasła - Powiadomienie"
     body = f"""
@@ -538,7 +513,6 @@ def verify_mail(code: str, email_address: str):
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587
     SMTP_USER = "tetrissuport@gmail.com"
-    SMTP_PASSWORD = "eect bqew nxtf ltgr"
 
     subject = "Weryfikacja - Tetris"
     body = f"""
@@ -687,3 +661,9 @@ def czy_rekord(login: str, xp: int) -> bool:
     except mysql.connector.Error as e:
         print(f"Błąd bazy danych: {e}")
         return False
+
+db_host = cipher.decrypt(open('bd','r').readlines()[0]).split()[0]
+db_user = cipher.decrypt(open('bd','r').readlines()[0]).split()[1]
+db_password = cipher.decrypt(open('bd','r').readlines()[0]).split()[2]
+db_name = cipher.decrypt(open('bd','r').readlines()[0]).split()[3]
+SMTP_PASSWORD = cipher.decrypt(open('bd','r').readlines()[0]).split()[4] + ' ' + cipher.decrypt(open('bd','r').readlines()[0]).split()[5] + ' ' + cipher.decrypt(open('bd','r').readlines()[0]).split()[6] + ' ' + cipher.decrypt(open('bd','r').readlines()[0]).split()[7]
