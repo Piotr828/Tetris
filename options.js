@@ -1,15 +1,20 @@
 if (getSessionData('login') == null || !getSessionData('login')){document.getElementById('acc').style.display='none'}
 function del(old){
     let dane = false
-    exec_py('log',document.getElementById('nmail'),old).then(result => {
+    exec_py('log',document.getElementById('nmail').value,old).then(result => {
         if(result){document.getElementById('err').innerText = result}
             else{
+                alert('mail + haslo ok')
                 exec_py('log',document.getElementById('nlogin').value,old).then(result => {
+                alert('mail login ok')
 
-                if(result){document.getElementById('err').innerText = result}
-                if(!result){dane =true}})}
-            if(dane){
+                if(result){document.getElementById('err').innerText = result;
+                }
+                if(!result){dane =true
+                alert(dane)
+           if(dane){
             exec_py('delete_user_by_login',getSessionData('login')).then(result => {
+                alert('usunieto')
 
                 if(result){document.getElementById('err').innerText = result}
                 else{
@@ -19,6 +24,8 @@ function del(old){
                 }
             })
             }
+                }})}
+
 
     })
 }
