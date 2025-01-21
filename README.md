@@ -14,13 +14,7 @@
 * Tabela rankingowa (generowana na podstawie wyżej wymienionej bazy)
 
 ### Instrukcja uruchomienia:
-Projekt należy uruchomić za pomocą konfiguracji "start" lub poprzez plik window.py
+Projekt należy uruchomić za pomocą konfiguracji "start" lub poprzez plik window.py. Możliwa jest także kompilacja projektu do pliku wykonywalnego. Nie został on dołączony do repozytorium.
 
 ### Niezbędne paczki:
-* **PyView**
-    * ```pip install pywebview```
-* importlib
-  * Paczka wbudowana - instalacja nie jest wymagana
-
-* **json**
-    * Paczka wbudowana - instalacja nie jest wymagana
+Paczki znajdują się w plku requirements.txt. Można je zainstalować poleceniem `pip install -r requirements.txt`
