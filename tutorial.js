@@ -215,8 +215,8 @@ function putpixel(color,x,y){
 }
 
 function game_over(){
+        playSound('end.mp3', getSessionData('eff_vol'));
         let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
-
 document.body.innerHTML = `
 </head>
 <body>

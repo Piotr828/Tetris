@@ -82,12 +82,13 @@ const randomColors = Array.from({ length: 21 }, () => colors[Math.floor(Math.ran
 document.getElementById('animacja').innerHTML = animacja;
 
 
-setMusicVolume()
     setTimeout(() => {
         exec_py('load_settings').then(result => {
             saveSessionData('eff_vol', result[0]-0);
             saveSessionData('music_vol',result[1]-0);
             saveSessionData('offsave',result[2]-0);
+            setMusicVolume()
+
         })
     exec_py('ping_domena', 'google.com').then(result => {
         if (!result) {

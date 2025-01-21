@@ -239,6 +239,7 @@ function dodajXP(XP){
 }
 //Sztuczne logowanie
 function game_over(){
+    playSound('end.mp3', getSessionData('eff_vol'));
     let punkty = Math.ceil(5*usuniete + 6*Math.sqrt(usuniete));
     exec_py('czy_rekord', getSessionData('login'),punkty).then(result => {
         if(result){
