@@ -31,30 +31,10 @@
     </audio>
     <main class="main">
         <header class="header">TETRIS</header>
-        <img src="images/Tetr2_red.png" class="klocek_menu klocek" style="left: calc(50vw - 25vh); animation-delay: 0s">
-        <img src="images/Tetr4_green.png" class="klocek_menu klocek" style="left: calc(50vw - 15vh); animation-delay: 10s">
-        <img src="images/Tetr6_blue2.png" class="klocek_menu klocek" style="left: calc(50vw); animation-delay: 20s">
-        <img src="images/Tetr1_green.png" class="klocek_menu klocek" style="left: calc(50vw + 10vh); animation-delay: 30s">
-        <img src="images/Tetr4_orange.png" class="klocek_menu klocek2" style="left: calc(50vw + 10vh); animation-delay: 39s">
-        <!-- <img src="images/Tetr5.png" class="klocek_menu klocek3" style="left: calc(50vw -10vh); animation-delay: 0s"> -->
-        <img src="images/Tetr7_yellow.png" class="klocek_menu klocek3" style="left: calc(50vw + 5vh); animation-delay: 48s">
-        <img src="images/Tetr3_purple.png" class="klocek_menu klocek3" style="left: calc(50vw - 25vh); animation-delay: 57s">
-        <img src="images/Tetr6_green.png" class="klocek_menu klocek4" style="left: calc(50vw + 15vh); animation-delay: 66s">
-        <img src="images/Tetr6_red.png" class="klocek_menu klocek3" style="left: calc(50vw - 20vh); animation-delay: 74s">
-        <img src="images/Tetr3_blue.png" class="klocek_menu klocek5 flip" style="left: calc(50vw - 5vh); animation-delay: 82s">
-        <img src="images/Tetr4_green.png" class="klocek_menu klocek6" style="left: calc(50vw - 20vh); animation-delay: 91s">
-        <img src="images/Tetr4_blue2.png" class="klocek_menu klocek6 flip" style="left: calc(50vw + 15vh); animation-delay: 100s">
-        <img src="images/Tetr1_orange.png" class="klocek_menu klocek8" style="left: calc(50vw - 25vh); animation-delay: 109s">
-        <img src="images/Tetr7_green.png" class="klocek_menu klocek8 flip" style="left: calc(50vw - 25vh); animation-delay: 118s">
-        <img src="images/Tetr1_blue.png" class="klocek_menu klocek6 flip" style="left: calc(50vw + 10vh); animation-delay: 127s">
-        <img src="images/Tetr5_blue2.png" class="klocek_menu klocek9" style="left: calc(50vw + 15vh); animation-delay: 135s">
-        <img src="images/Tetr3_yellow.png" class="klocek_menu klocek35 flip" style="left: calc(50vw + 5vh); animation-delay: 143s">
-        <img src="images/Tetr6_green.png" class="klocek_menu klocek7 flip" style="left: calc(50vw - 15vh); animation-delay: 151s">
-        <img src="images/Tetr2_red.png" class="klocek_menu klocek10" style="left: calc(50vw - 25vh); animation-delay: 159s">
-        <img src="images/Tetr4_blue2.png" class="klocek_menu klocek45 flip2" style="left: calc(50vw); animation-delay: 167s">
-        <img src="images/Tetr6_green.png" class="klocek_menu klocek11" style="left: calc(50vw + 15vh); animation-delay: 175s">
 
-
+<span id="animacja">
+<!--        TU Były KLocKi -->
+</span>
 
         <nav class="navigation">
 
@@ -71,6 +51,35 @@
     </div>
     </main>
 <script>
+const colors = ["red", "blue", "orange", "blue2", "green", "purple", "yellow"];
+
+// Generowanie tablicy 21 losowych stringów
+const randomColors = Array.from({ length: 21 }, () => colors[Math.floor(Math.random() * colors.length)]);
+
+    let animacja = `
+        <img src="images/Tetr2_${randomColors[20]}.png" class="klocek_menu klocek" style="left: calc(50vw - 25vh); animation-delay: 0s">
+<img src="images/Tetr4_${randomColors[0]}.png" class="klocek_menu klocek" style="left: calc(50vw - 15vh); animation-delay: 10s">
+        <img src="images/Tetr6_${randomColors[1]}.png" class="klocek_menu klocek" style="left: calc(50vw); animation-delay: 20s">
+        <img src="images/Tetr1_${randomColors[2]}.png" class="klocek_menu klocek" style="left: calc(50vw + 10vh); animation-delay: 30s">
+        <img src="images/Tetr4_${randomColors[3]}.png" class="klocek_menu klocek2" style="left: calc(50vw + 10vh); animation-delay: 39s">
+        <img src="images/Tetr7_${randomColors[4]}.png" class="klocek_menu klocek3" style="left: calc(50vw + 5vh); animation-delay: 48s">
+        <img src="images/Tetr3_${randomColors[5]}.png" class="klocek_menu klocek3" style="left: calc(50vw - 25vh); animation-delay: 57s">
+        <img src="images/Tetr6_${randomColors[6]}.png" class="klocek_menu klocek4" style="left: calc(50vw + 15vh); animation-delay: 66s">
+        <img src="images/Tetr6_${randomColors[7]}.png" class="klocek_menu klocek3" style="left: calc(50vw - 20vh); animation-delay: 74s">
+        <img src="images/Tetr3_${randomColors[8]}.png" class="klocek_menu klocek5 flip" style="left: calc(50vw - 5vh); animation-delay: 82s">
+        <img src="images/Tetr4_${randomColors[9]}.png" class="klocek_menu klocek6" style="left: calc(50vw - 20vh); animation-delay: 91s">
+        <img src="images/Tetr4_${randomColors[10]}.png" class="klocek_menu klocek6 flip" style="left: calc(50vw + 15vh); animation-delay: 100s">
+        <img src="images/Tetr1_${randomColors[11]}.png" class="klocek_menu klocek8" style="left: calc(50vw - 25vh); animation-delay: 109s">
+        <img src="images/Tetr7_${randomColors[12]}.png" class="klocek_menu klocek8 flip" style="left: calc(50vw - 25vh); animation-delay: 118s">
+        <img src="images/Tetr1_${randomColors[13]}.png" class="klocek_menu klocek6 flip" style="left: calc(50vw + 10vh); animation-delay: 127s">
+        <img src="images/Tetr5_${randomColors[14]}.png" class="klocek_menu klocek9" style="left: calc(50vw + 15vh); animation-delay: 135s">
+        <img src="images/Tetr3_${randomColors[15]}.png" class="klocek_menu klocek35 flip" style="left: calc(50vw + 5vh); animation-delay: 143s">
+        <img src="images/Tetr6_${randomColors[16]}.png" class="klocek_menu klocek7 flip" style="left: calc(50vw - 15vh); animation-delay: 151s">
+        <img src="images/Tetr2_${randomColors[17]}.png" class="klocek_menu klocek10" style="left: calc(50vw - 25vh); animation-delay: 159s">
+        <img src="images/Tetr4_${randomColors[18]}.png" class="klocek_menu klocek45 flip2" style="left: calc(50vw); animation-delay: 167s">
+        <img src="images/Tetr6_${randomColors[19]}.png" class="klocek_menu klocek11" style="left: calc(50vw + 15vh); animation-delay: 175s">
+`
+document.getElementById('animacja').innerHTML = animacja;
 
 
 setMusicVolume()

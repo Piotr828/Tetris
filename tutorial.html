@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tetris Game</title>
+<title>Page Title</title>
     <script src="api.js"></script>
-    <script src="scripts.js"></script>
+    <script src="tutorial.js"></script>
+    <!-- Kodowanie znaków -->
     <meta charset="UTF-8">
+    <!-- Domyślny język -->
     <meta http-equiv="Content-Language" content="pl">
+    <!-- Informacje o autorze -->
     <meta name="author" content="Twoje Imię i Nazwisko">
+    <!-- Zapobieganie cache'owaniu -->
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta http-equiv="pragma" content="no-cache">
+    <!-- Zabezpieczenia przed clickjackingiem -->
     <meta http-equiv="X-Frame-Options" content="deny">
+    <!-- Ustawienie ikon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="icon.png">
-    <meta name="application-name" content="Tetris Game">
+    <!-- Styl okienka (np. minimalizacja stylu przeglądarki dla lepszego efektu aplikacji) -->
+    <meta name="application-name" content="Nazwa Twojej aplikacji">
     <meta name="theme-color" content="#000000">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/navigation.css">
-    <link rel="stylesheet" href="css/game-controls.css">
+        <script src="tutorial.js" ></script>
+
 </head>
 <body class="body">
 <audio autoplay loop style="display: none;">
-    <source src="music/tetrisgra.wav" type="audio/mpeg">
-</audio>
-<main class="main" id="main_js">
-    <span id="p_cont"></span>
-    <span id="klocki"></span>
-    <span id="pauza" style="display: none;">I I</span>
-</main>
+        <source src="music/tetrisgra.wav" type="audio/mpeg">
+    </audio>
+    <main class="main" id="main_js">
+<span id="p_cont"></span>
+<span id="klocki"></span>
+<span id="pauza">I I</span>
+    </main>
 
-<!-- Dodaj przyciski sterujące -->
-<div id="game-controls" style="position:fixed">
-    <button id="start-btn" onclick="startgame()">ROZPOCZNIJ</button>
-    <button id="restart-btn" style="display: none;">ROZPOCZNIJ PONOWNIE</button>
-</div>
-<script src="tutorial.js"></script>
+<img src="images/control_panel1_aligned.png" style="position: fixed; width: 50vh; left: 5vh; z-index: -1">
+<img src="images/control_panel2.png" style="position: fixed; width: 50vh; right: 5vh;; z-index: -1">
+<span id="deld" style="font-family: 'My Font'; font-size: 10vh; color: blueviolet; position: fixed; right: calc( (100vw - 50vh) / 4 - 5vh); max-width: 20vh; overflow-wrap: break-word;">0</span>
+<script>startgame(); setMusicVolume()
+
+
+
+</script>
 </body>
 </html>

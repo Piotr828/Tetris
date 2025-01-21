@@ -135,3 +135,29 @@ function setMusicVolume() {
         console.error("Element audio nie został znaleziony.");
     }
 }
+function playSound(fileName, volume = 50) {
+    if (typeof fileName !== 'string' || volume < 0 || volume > 100) {
+        console.error('Niepoprawne argumenty. Upewnij się, że nazwa pliku jest ciągiem znaków, a głośność to liczba między 0 a 1.');
+        return;
+    }
+
+    const audio = new Audio("music/"+fileName);
+    audio.volume = volume/100;
+    audio.play().catch(error => {
+        console.error('Nie udało się odtworzyć dźwięku:', error);
+    });
+}
+
+// Przykładowe użycie
+function addClickListenersToButtons() {
+    const buttons = document.querySelectorAll('button'); // Wybiera wszystkie przyciski na stronie
+    buttons.forEach(button => {
+        button.onclick = () => {
+            playSound('tetris_pop.wav', getSessionData('eff_vol'));
+        };
+    });
+}
+
+// Wywołanie funkcji, aby przypisać listener do przycisków
+addClickListenersToButtons();
+setMusicVolume()
