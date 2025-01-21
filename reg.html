@@ -22,7 +22,7 @@
         <input type="text" placeholder="Login" id="login" required>
                 <i class='bx bxs-user'></i>
             </div>
-            <div class="input-box">
+            <div class="input-box" id="mail_box">
             <input type="text" placeholder="Adres E-mail" id="mail" required> <i class='bx bxs-user'></i>
             </div>
                 <div class="input-box">
@@ -36,8 +36,10 @@
                 <input type="password" placeholder="Powtórz hasło" id="haslo2" required>
                 <i class='bx bxs-lock-alt'></i>
             </div>
-          <div style="color: red; line-height: 0;" id="err"></div><br>
-            <input value="Zarejestruj" type="button" class="btn" onclick="register(document.getElementById('mail').value,document.getElementById('login').value,document.getElementById('haslo1').value,document.getElementById('haslo2').value)">
+          <div style="color: red;" id="err"></div><br>
+            <span id="btns">
+            <input value="Zweryfikuj" id="reg" type="button" class="btn" onclick="checkMail(document.getElementById('mail').value)">
+            </span>
             <div class="register-link">
                 <p>Masz konto? <a href="log.html">Zaloguj!</a>
 

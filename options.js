@@ -1,9 +1,13 @@
 if (getSessionData('login') == null || !getSessionData('login')){document.getElementById('acc').style.display='none'}
 function del(old){
     let dane = false
-    exec_py('log',getSessionData('login'),old).then(result => {
+    exec_py('log',document.getElementById('nmail'),old).then(result => {
         if(result){document.getElementById('err').innerText = result}
-            else{dane =true}
+            else{
+                exec_py('log',document.getElementById('nlogin').value,old).then(result => {
+
+                if(result){document.getElementById('err').innerText = result}
+                if(!result){dane =true}})}
             if(dane){
             exec_py('delete_user_by_login',getSessionData('login')).then(result => {
 
@@ -51,7 +55,7 @@ function zapisz_ustawienia(effVol, mscVol,offsave,newlogin, newpass, newmail,old
 }
 
 setMusicVolume()
-document.getElementById('msc').value =     getSessionData('music_vol');
+document.getElementById('msc').value = getSessionData('music_vol');
 document.getElementById('msc').nextElementSibling.value =     getSessionData('music_vol') ?? 50;
 
 document.getElementById('eff').value =     getSessionData('eff_vol');
@@ -63,13 +67,10 @@ document.getElementById('ofl').checked =     !!getSessionData('offsave');
 
 }
 
-
-
 setMusicVolume()
-document.getElementById('msc').value =     getSessionData('music_vol');
+document.getElementById('msc').value = getSessionData('music_vol');
 document.getElementById('msc').nextElementSibling.value =     getSessionData('music_vol') ?? 50;
 
-document.getElementById('eff').value =     getSessionData('eff_vol');
+document.getElementById('eff').value = getSessionData('eff_vol');
 document.getElementById('eff').nextElementSibling.value =     getSessionData('eff_vol') ?? 50;
-
-document.getElementById('ofl').checked =     !!getSessionData('offsave');
+document.getElementById('ofl').checked = !!getSessionData('offsave');

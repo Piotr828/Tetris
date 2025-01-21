@@ -6,12 +6,30 @@ import datetime
 import smtplib
 from email.message import EmailMessage
 from random import randint as losuj
+import os
 
+# Pobranie danych z zmiennych środowiskowych
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASS')
+db_name = os.getenv('DB_NAME')
 
-db_host = 'srv1628.hstgr.io'
-db_user = 'u335644235_sqlAdmin'
-db_password = 'bZ6sCKAU3E'
-db_name = 'u335644235_tetris'
+# Weryfikacja, czy wszystkie zmienne są ustawione
+print([db_host, db_user, db_password, db_name])
+
+# Kod do połączenia z bazą danych
+import mysql.connector
+
+try:
+    connection = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_name
+    )
+    print("Połączono z bazą danych")
+except mysql.connector.Error as e:
+    print(f"Błąd podczas połączenia z bazą danych: {e}")
 
 def close():
     os._exit(0)
@@ -515,9 +533,8 @@ def send_password_change_email(new_password: str, email_address: str):
 
 
 def verify_mail(code: str, email_address: str):
-    if not is_valid_email(email_address) or is_email_available(email_address) :
-        print(is_valid_email(email_address), is_email_available(email_address))
-        return 1
+    if not is_valid_email(email_address):
+        return 'Weryfikacja adresu e-mail zakończona niepowodzeniem.'
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587
     SMTP_USER = "tetrissuport@gmail.com"
