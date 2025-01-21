@@ -191,7 +191,7 @@ function nowyKlocek() {
             game_over();
             //window.location = 'index.html'
         }
-           if(paused){stopped = 1;
+           if(paused){
            document.getElementById('klocki').style.display = 'none'
                           document.getElementById('pauza').style.display = 'block'
 
@@ -272,8 +272,6 @@ document.body.innerHTML = `
 document.addEventListener('keydown', (event) => {
     if (event.key === 'p' || event.key === 'P'){
 paused = !paused
-    if (stopped && paused){
-        stopped = !stopped
-    }}
+    }
 });
 setMusicVolume()
